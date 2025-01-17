@@ -1,3 +1,5 @@
+
+--Create enum type 
 CREATE TYPE public.account_type AS ENUM
     ('Client', 'Employee', 'Admin');
 
@@ -235,3 +237,30 @@ VALUES   (
     'White',
     5
   );
+
+--Activity 1
+-- Task 4 - Update inventory
+UPDATE 
+	public.inventory
+SET 
+	inv_description = REPLACE(inv_description, 'the small interiors', 'a huge interior')
+WHERE
+	inv_id = 10
+
+-- Task 5 - inner join
+SELECT 
+	inv_make, inv_model, classification_name
+FROM
+	classification
+INNER JOIN
+	inventory
+	ON classification.classification_id = inventory.classification_id
+WHERE
+	classification.classification_id = 2
+
+-- Task 6 -- update file path
+UPDATE inventory
+SET 
+    inv_image = REPLACE(inv_image, '/images/', '/images/vehicles/'),
+    inv_thumbnail = REPLACE(inv_thumbnail, '/images/', '/images/vehicles/');
+
