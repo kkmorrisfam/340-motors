@@ -1,5 +1,6 @@
 -- Kerri Morris - Week 2
 --Team - Create Type
+--When deleting and recreating, change database name at "OWNER TO" line
 CREATE TYPE public.account_type AS ENUM
     ('Client', 'Employee', 'Admin');
 
