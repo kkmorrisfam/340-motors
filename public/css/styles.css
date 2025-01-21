@@ -223,6 +223,10 @@ main {
     padding: 0;
     list-style: none;
     justify-content: center; 
+    place-content: center;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));    
+    margin: 0 auto;         
+    
 }
 
 #inv-display li {
@@ -241,6 +245,8 @@ main {
 #inv-display img {
     width: 100%;
     height: auto;
+    /* height: 200px; */
+    /* object-fit: cover; */
     border-radius: 4px;
 }
 
@@ -260,6 +266,10 @@ main {
     font-weight: bold;
 }
 
+.notice {
+    font-size: 2rem;
+    color: var(--clr-medium2);
+}
 
 /* Footer */
 
@@ -343,9 +353,9 @@ main {
         padding: .5rem;        
     }   
 
-    #inv-display {
-        grid-template-columns: repeat(2, 1fr); /* 2 cards per row */
-      }
+    /* #inv-display {
+        grid-template-columns: repeat(2, 1fr); 
+      } */
 }
 
 @media screen and (min-width: 760px) {
@@ -363,9 +373,9 @@ main {
         padding: 2rem;
     }
 
-    #inv-display {
-        grid-template-columns: repeat(3, 1fr); /* 3 cards per row */
-      }
+    /* #inv-display {
+        grid-template-columns: repeat(3, 1fr); 
+      } */
 
       .namePrice span {
         font-size: 1.2rem;       
