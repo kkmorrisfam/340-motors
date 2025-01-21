@@ -119,6 +119,7 @@
     font-weight: 700;
 }
 
+/* Class .active not used week 3 dynamic code changes ? */
 .active {
     padding: 10px;
     border: 2px solid var(--clr-medium1);
@@ -214,6 +215,52 @@ main {
 .reviews ul li {
     padding: .2rem;
 }
+
+/* ********** Vehicle View****** */
+#inv-display {
+    display: grid; 
+    gap: 1rem; 
+    padding: 0;
+    list-style: none;
+    justify-content: center; 
+}
+
+#inv-display li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--clr-light1);
+    border: 1px solid var(--clr-medium2);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    text-align: center;
+    max-width: 300px;    
+}
+
+#inv-display img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+/* Name and price container */
+.namePrice {
+    margin-top: 1rem;
+}
+  
+.namePrice h2 {
+    font-size: 1.25rem;
+    margin: 0.5rem 0;
+}
+  
+.namePrice span {
+    font-size: 1rem;
+    color: var(--clr-dark2);
+    font-weight: bold;
+}
+
+
 /* Footer */
 
 .copyright {
@@ -293,8 +340,12 @@ main {
         order: 1;
     }
     .reviews ul li {
-        padding: .5rem;
+        padding: .5rem;        
     }   
+
+    #inv-display {
+        grid-template-columns: repeat(2, 1fr); /* 2 cards per row */
+      }
 }
 
 @media screen and (min-width: 760px) {
@@ -310,5 +361,13 @@ main {
     
     .reviews ul{
         padding: 2rem;
+    }
+
+    #inv-display {
+        grid-template-columns: repeat(3, 1fr); /* 3 cards per row */
+      }
+
+      .namePrice span {
+        font-size: 1.2rem;       
     }
 }
