@@ -23,6 +23,7 @@
 
  h1 {
     color: var(--clr-dark1);
+    padding: 1rem;    
  }
 
  h2,
@@ -273,6 +274,10 @@ main {
 }
 
 /* Footer */
+
+footer {
+    padding-top: 1rem;
+}
 
 .copyright {
 
