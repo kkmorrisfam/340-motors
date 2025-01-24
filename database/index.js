@@ -24,6 +24,7 @@ if (process.env.NODE_ENV == "development") {
             try {
                 const res = await pool.query(text, params)
                 console.log("executed query", {text})
+                console.log("inside database/index.js file in module.exports query in development mode");
                 return res
             } catch (error) {
                 console.error("error in query", { text })

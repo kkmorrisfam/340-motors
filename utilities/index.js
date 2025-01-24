@@ -7,6 +7,7 @@ const Util = {}
 Util.getNav = async function (req, res, next) {
   let data = await invModel.getClassifications()
 //   console.log(data);
+  console.log("inside utilities/index.js in Util.getNav to build the html for invModel.getClassifications()");
   let list = "<ul>"
   list += '<li><a href="/" title="Home page">Home</a></li>'
   data.rows.forEach((row) => {
@@ -27,6 +28,7 @@ Util.getNav = async function (req, res, next) {
 
 Util.buildClassificationGrid = async function(data){
     let grid
+    console.log("inside utilities/index.js Util.buildClassificaitonGrid function to build html grid/vehicle cards by classification")
     if(data.length > 0){
       grid = '<ul id="inv-display">'
       data.forEach(vehicle => { 
@@ -53,6 +55,13 @@ Util.buildClassificationGrid = async function(data){
       grid += '<p class="notice">Sorry, no matching vehicles could be found.</p>'
   }
   return grid
+}
+
+Util.buildVehicleView = async function(data) {
+  // console.log("data in buildVehicleView: ", data);
+  let vehicleView = '<div class=vehicleView>Test div vehicleView</div>';
+
+  return vehicleView;
 }
 
 /* ************************

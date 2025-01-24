@@ -8,6 +8,8 @@ router.use("/css", express.static(__dirname + "public/css"));
 router.use("/js", express.static(__dirname + "public/js"));
 router.use("/images", express.static(__dirname + "public/images"));
 
+console.log("inside routes/static.js file");
+
 module.exports = router;
 
 

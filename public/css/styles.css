@@ -273,6 +273,38 @@ main {
     color: var(--clr-medium2);
 }
 
+.vehicleView {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.imgContainer {
+    overflow: hidden;
+}
+
+.imgContainer img {
+    max-width: 100%;        
+    height: 100%;
+    object-fit: contain;
+}
+
+.vehicleDetails > *:nth-child(odd) {
+    background-color: var(--clr-light1); /* Light gray for odd items */
+    padding: 1rem;
+}
+
+.vehicleDetails > *:nth-child(even) {
+    background-color: var(--clr-light2); /* White for even items */
+}
+
+.vehicleDetails {
+    margin: 2rem;
+}
+
+.bold {
+    font-weight: 700;
+}
+
 /* Footer */
 
 footer {

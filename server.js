@@ -46,6 +46,7 @@ app.use("/inv", inventoryRoute)
 
 // File Not Found Route - must be last route in list
 app.use(async (req, res, next) => {
+  console.log("in server.js file; app.use, file not found")
   next({status: 404, message: 'Sorry, we appear to have lost that page.'})
 })
 
@@ -64,6 +65,7 @@ app.use(async (err, req, res, next) => {
     nav
   })
 })
+console.log("inside server.js before port and host and listen.")
 
 /* ***********************
  * Local Server Information
