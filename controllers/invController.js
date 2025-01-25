@@ -41,4 +41,14 @@ invCont.buildByInv_id = async function (req, res, next) {
 }
 
 
+invCont.findServerError = async function (req, res, next) {
+    try {
+        console.log("inside invController findServerError function");        
+        throw new Error("Intentional server error triggered for testing purposes.");
+    } catch (error) {
+        error.status = 500;
+        next(error);
+    }
+};
+
 module.exports = invCont

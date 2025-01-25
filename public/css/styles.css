@@ -66,8 +66,9 @@
 #wrapper {
     background-color: var(--clr-light1);
     width: 95%;
-    padding: 2rem;
-    
+    padding: .5rem;
+    border: 5px ridge var(--clr-medium2); 
+    margin: 1rem auto;
 }
 
 /* -------------Header------ */
@@ -150,6 +151,7 @@ main {
     object-fit: cover;
     margin: 3rem 0 0 6.5rem;
 }
+
 .hero h1 {
     position: absolute;
     text-align: left;
@@ -283,9 +285,12 @@ main {
 }
 
 .imgContainer img {
+    display: block;
     max-width: 100%;        
     height: 100%;
     object-fit: contain;
+    margin: 0 auto;
+    padding: 0 1rem;
 }
 
 .vehicleDetails > *:nth-child(odd) {
@@ -302,9 +307,33 @@ main {
 }
 
 .bold {
-    font-weight: 700;
+    font-weight: 900;
+    color: var(--clr-dark1);
 }
 
+/* ************* Error ************** */
+.error {
+    overflow: hidden;
+    position: relative;
+   
+}
+.error * {
+    margin: 0 auto;
+    text-align: center;
+}
+
+.error img {
+    display: block;
+    max-width: 80%;            
+    object-fit: contain;
+    opacity: 0.5;
+}
+
+.error h2 {
+    position: absolute;
+    top: 50px;
+    font-size: medium;
+}
 /* Footer */
 
 footer {
@@ -335,7 +364,7 @@ footer {
         /* background-color: var; */
         width: 80%;
         margin: 1rem auto;
-        border: 5px ridge var(--clr-medium2); 
+        
     }
 
     .siteName {        
@@ -417,5 +446,19 @@ footer {
 
       .namePrice span {
         font-size: 1.2rem;       
+    }
+
+    
+    .imgContainer img {
+        padding: 0 2rem;
+    }
+
+    .error img {
+        max-height: 50vh;
+    }
+
+    .error h2 {      
+        font-size: large;
+        left: 50px;
     }
 }

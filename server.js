@@ -57,14 +57,19 @@ app.use(async (req, res, next) => {
 app.use(async (err, req, res, next) => {
   let nav = await utilities.getNav()
   console.error(`Error at: ${req.originalUrl}: ${err.message}`)
-  if (err.status == 404) {message = err.message} else {message = 'Oh no!  There was a crash. Maybe try a different route?'}
-  res.render("errors/error", {
+  
+  let status = err.status || 500; //use this to put in code in case err.status doesn't return a value
+  if (status == 404) {message = err.message} else {message = `Error ${status}: Oh no!  There was a crash. Maybe try a different route?`}
+  res.status(status).render("errors/error", {
     title: err.status || 'Server Error',
+    // title: `Error ${status}`,
     // message: err.message,
     message,
     nav
   })
 })
+
+
 console.log("inside server.js before port and host and listen.")
 
 /* ***********************

@@ -58,9 +58,18 @@ Util.buildClassificationGrid = async function(data){
 }
 
 Util.buildVehicleView = async function(data) {
-  // console.log("data in buildVehicleView: ", data);
-  let vehicleView = '<div class=vehicleView>Test div vehicleView</div>';
-
+  console.log("data in buildVehicleView: ", data[0]);
+  let vehicleView = '<div class="vehicleView">';
+  
+  vehicleView += '<div class="imgContainer">' 
+  vehicleView += '<img src="' + data[0].inv_image + '" alt="' + data[0].inv_model + '"></div>'           
+  vehicleView += '<div class="vehicleDetails">'              
+  vehicleView += '<h2>' + data[0].inv_make + ' ' + data[0].inv_model + ' Details</h2>'                  
+  vehicleView += '<h3><span class=bold>Price </span><span>&#36;' + new Intl.NumberFormat('en-US').format(data[0].inv_price) +'</span></h3>'              
+  vehicleView += '<p><span class=bold>Description: </span>' + data[0].inv_description +'</p>'              
+  vehicleView += '<h3><span class=bold>Color: </span>' + data[0].inv_color + '</h3>'  
+  vehicleView += '<h3><span class=bold>Mileage: </span>' + new Intl.NumberFormat('en-US').format(data[0].inv_miles) + '</h3>'                
+  vehicleView += '<h3><span class=bold>Year: </span>' + data[0].inv_year + '</h3></div></div>'
   return vehicleView;
 }
 
