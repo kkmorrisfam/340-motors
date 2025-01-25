@@ -314,9 +314,9 @@ main {
 /* ************* Error ************** */
 .error {
     overflow: hidden;
-    position: relative;
-   
+    position: relative;   
 }
+
 .error * {
     margin: 0 auto;
     text-align: center;
@@ -326,12 +326,12 @@ main {
     display: block;
     max-width: 80%;            
     object-fit: contain;
-    opacity: 0.5;
+    /* opacity: 0.5; */
 }
 
 .error h2 {
-    position: absolute;
-    top: 50px;
+    /* position: absolute; */
+    /* top: 50px; */
     font-size: medium;
 }
 /* Footer */
