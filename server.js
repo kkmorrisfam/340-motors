@@ -15,6 +15,7 @@ const inventoryRoute = require("./routes/inventoryRoute")
 const utilities = require("./utilities/index") /* can also just use ("./utilities/") because index is a default value*/
 const session = require("express-session")
 const pool = require('./database/')
+// const accountRoute = require("./routes/accountRoute")
 
 /* ***********************
  * View Engine and Templates
@@ -66,6 +67,11 @@ app.get("/", utilities.handleErrors(baseController.buildHome))
 // any route that starts with /inv will then be redirected to the inventoryRoute.js file to find the 
 // rest of the route in order to fulfill the request
 app.use("/inv", inventoryRoute)
+
+// Account route
+app.use("/account", require("./routes/accountRoute")) //can also write it like this
+// app.use("/account", accountRoute)
+
 
 // File Not Found Route - must be last route in list
 app.use(async (req, res, next) => {
