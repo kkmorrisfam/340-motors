@@ -339,29 +339,39 @@ main {
     font-size: medium;
 }
 
+#messages ul li{
+    /* text-shadow: 0px 2px 2px #282828; */
+    font: 2rem;
+    list-style: none;
+    color: var(--clr-medium1);
+    -webkit-text-stroke: .5px #67421f;
+}
+
 /*------------Forms----------- */
-#login-container {
+.form-container {
     margin: 0 auto;
     /* border: 1px solid #445ba9; */
     /* border-radius: 10px; */
-    padding: .5rem 2%;
+    /* padding: .5rem 2%; */
     max-width: 600px;
 }
 
 .form {
-    /* display: flex; */
-    /* flex-direction: column; */
     background-color: var(--clr-medium2);
-    color: var(--clr-dark2);
-    
+    color: var(--clr-dark2);    
 }
+.form div {
+    padding-left: 2rem;
+}
+
 .required {
     text-align: right;
     font-size: .7rem;    
-    margin-top: 1rem;
+    padding-top: 1rem;
+    padding-right: 1rem;    
 }
 
-.login-form label {
+.form label {
     display: block;
     padding: 1rem;
 }
@@ -373,6 +383,11 @@ main {
     max-width: 500px;    
     border-radius: 5px;
     color: var(--clr-dark2);
+}
+
+.pwd-list {
+    list-style:circle;
+    padding-left: 3rem;    
 }
 
 .submitBtn {

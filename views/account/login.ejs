@@ -1,14 +1,15 @@
 <h1><%= title %></h1>
-<div id="login-container" class="border">
-    <form method="get" action="/" class="login-form">
-        <div class="required">*indicates required field</div>
-        <label for="account-email" class="top">Email*
-            <input type="text" name="account-email" id="account-email" required placeholder="myemail@somewhere.com">
+<%- messages() %>
+<div class="form-container border">
+    <form method="get" action="/" class="form">
+        <div class="required">All fields are required</div>
+        <label for="account_email" class="top">Email
+            <input type="text" name="account_email" id="account_email" required placeholder="myemail@somewhere.com">
         </label>
-        <label for="account-password" class="top">Password*
-            <input type="password" name="account-password" id="account-password" required placeholder="***********">
+        <label for="account_password" class="top">Password
+            <input type="password" name="account_password" id="account_password" required placeholder="***********">
         </label>
         <input type="submit" value="Login" class="submitBtn">
-        <h2>No Account? <a href="account/registration">Sign Up</a></h2>
+        <h2>No Account? <a href="./register">Sign Up</a></h2>
     </form>    
 </div>

@@ -11,4 +11,10 @@ const utilities = require("../utilities/")
 console.log("inside accountRoute")
 router.get("/login", utilities.handleErrors(accountController.buildLogin));
 
+//add route for registration page
+router.get("/register", utilities.handleErrors(accountController.buildRegister));
+
+// add route to post registration form
+router.post('/register', utilities.handleErrors(accountController.registerAccount))
+
 module.exports = router;
