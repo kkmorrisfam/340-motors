@@ -24,6 +24,8 @@ async function buildRegister(req, res, next) {
     res.render("account/register", {
        title: "Register",
        nav, 
+       //need this.  EJS view could throw an error because "errors" variable is expected and not found
+       errors: null,
     })
 }
 

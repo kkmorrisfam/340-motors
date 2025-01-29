@@ -4,6 +4,7 @@ const express = require("express")
 const router = new express.Router()
 const accountController = require("../controllers/accountController")
 const utilities = require("../utilities/")
+const regValidate = require('../utilities/account-validation')
 
 // the server.js file has the "/account" part of the path, then sends it to this file.  When the route
 // also has "/login" after "/account"  it then adds the 
@@ -15,6 +16,10 @@ router.get("/login", utilities.handleErrors(accountController.buildLogin));
 router.get("/register", utilities.handleErrors(accountController.buildRegister));
 
 // add route to post registration form
-router.post('/register', utilities.handleErrors(accountController.registerAccount))
+router.post(
+    '/register', 
+    regValidate.registrationRules(),
+    regValidate.checkRegData,
+    utilities.handleErrors(accountController.registerAccount))
 
 module.exports = router;

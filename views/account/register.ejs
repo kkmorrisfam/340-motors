@@ -1,5 +1,13 @@
 <h1><%= title %></h1>
 <%- messages() %>
+<% if (errors) { %>
+    <ul class = "notice">
+    <% errors.array().forEach(error => { %>
+        <li><%= error.msg %></li>
+    <% }) %>
+    </ul>
+<% } %>
+
 <div class="form-container border">
     <form method="post" action="/account/register" class="form">
         <div class="required">All fields are required</div>
@@ -31,6 +39,7 @@
             <ul class="pwd-list">
                 <li>a minumum of 12 characters</li>
                 <li>contain at least one capital letter</li>
+                <li>contain at least one lowercase letter</li>
                 <li>contain at least one number</li>
                 <li>contain at least non-alphanumeric character</li>
             </ul>
