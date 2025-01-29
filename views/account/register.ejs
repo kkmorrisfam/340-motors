@@ -6,14 +6,25 @@
         <label for="account_firstname" class="top">First Name
             <input type="text" name="account_firstname" id="account_firstname" required>
         </label>
-        <label for="account_lastname" class="top">Password
+        <label for="account_lastname" class="top">Last Name
             <input type="text" name="account_lastname" id="account_lastname" required>
         </label>
         <label for="account_email" class="top">Email
-            <input type="text" name="account_email" id="account_email" required placeholder="myemail@somewhere.com">
+            <input type="email" 
+            name="account_email" 
+            id="account_email" 
+            required 
+            placeholder="myemail@somewhere.com"
+            >
         </label>
         <label for="account_password" class="top">Password*
-            <input type="password" name="account_password" id="account_password" required placeholder="***********">
+            <input type="password" 
+            name="account_password" 
+            id="account_password" 
+            required 
+            placeholder="***********" 
+            pattern= "^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{12,}$">
+            
         </label>
         <div>
             <h2>*Password must be: </h2>
@@ -21,7 +32,7 @@
                 <li>a minumum of 12 characters</li>
                 <li>contain at least one capital letter</li>
                 <li>contain at least one number</li>
-                <li>contain at least one special character</li>
+                <li>contain at least non-alphanumeric character</li>
             </ul>
         </div>
         <input type="submit" value="Register" class="submitBtn">        

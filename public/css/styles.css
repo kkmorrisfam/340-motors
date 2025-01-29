@@ -384,6 +384,13 @@ main {
     border-radius: 5px;
     color: var(--clr-dark2);
 }
+input:required:invalid, input:focus:invalid {
+    background-color: bisque;
+}
+
+input:required:valid {
+    background-color: white ;
+}
 
 .pwd-list {
     list-style:circle;
