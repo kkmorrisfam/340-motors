@@ -339,7 +339,8 @@ main {
     font-size: medium;
 }
 
-#messages ul li{
+/* #messages ul li, */
+.notice li {
     /* text-shadow: 0px 2px 2px #282828; */
     font: 2rem;
     list-style: none;
