@@ -1,7 +1,7 @@
 const utilities = require(".")
 const  {body, validationResult } = require("express-validator")
 const validate = {}
-
+const accountModel = require("../models/account-model")
 
 /* **********************************
  * Registration Data Validation Rules
@@ -33,7 +33,43 @@ validate.registrationRules = () => {
             .notEmpty()
             .isEmail()
             .normalizeEmail() 
-            .withMessage("Please provide a last name."), //on error this message is sent
+            .withMessage("Please provide a valid email.") //on error this message is sent
+            .custom(async (account_email) => {
+                const emailExists = await accountModel.checkExistingEmail(account_email)
+                if (emailExists) {
+                    throw new Error("Email exists.  Please log in or use a different email.")
+                }
+            }),
+
+        body("account_password")
+            .trim()
+            .notEmpty()
+            .isStrongPassword({
+                minLength: 12,
+                minLowerCase: 1,
+                minUpperCase: 1,
+                minNumbers: 1,
+                minSymbols: 1,
+            })
+            .withMessage("Password does not meet requirements."),
+    ]
+}
+
+/* **********************************
+ * Login Data Validation Rules
+ ************************************/
+
+validate.loginRules = () => {
+    console.log("Inside validate.loginRules in utilities/account-validation file")
+    return [
+        // valid email is required and cannot already exist in the Database
+        body("account_email")
+            .trim()
+            .escape()
+            .notEmpty()
+            .isEmail()
+            .normalizeEmail() 
+            .withMessage("Please provide a valid email."), //on error this message is sent
 
         body("account_password")
             .trim()
@@ -67,6 +103,30 @@ validate.checkRegData = async (req, res, next) => {
             nav,
             account_firstname,
             account_lastname,
+            account_email,
+            // we don't send the password back to the user            
+        })
+        return
+    }
+    next()
+}
+
+/* ***********************************
+ * Check data and return errors 
+ * or continue to login ???
+*************************************/
+
+validate.checkLoginData = async (req, res, next) => {
+    const {account_email } = req.body
+    console.log("inside validate.checkLoginData in utilities/account-validation file")
+    let errors = []
+    errors = validationResult(req)
+    if (!errors.isEmpty()) {
+        let nav = await utilities.getNav()
+        res.render("account/login", {
+            errors,
+            title: "Login",
+            nav,
             account_email,
             // we don't send the password back to the user            
         })
