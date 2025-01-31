@@ -12,6 +12,7 @@
 :root {
     --clr-light1: #EDF7D2;
     --clr-light2: #F3E9D2;
+    --clr-light3: #ffdcac;
     --clr-medium1: #F49E4C;
     --clr-medium2: #88D498;
     --clr-dark1: #353831;
@@ -375,6 +376,7 @@ main {
 .form label {
     display: block;
     padding: 1rem;
+    font-size: 2rem;
 }
 
 .top input  {
@@ -386,7 +388,7 @@ main {
     color: var(--clr-dark2);
 }
 input:required:invalid, input:focus:invalid {
-    background-color: bisque;
+    background-color: var(--clr-light3);
 }
 
 input:required:valid {
@@ -409,6 +411,23 @@ input:required:valid {
     margin: 0 0 2rem 2%;
     width: 96%;
     max-width: 20rem;
+}
+
+
+/* -----Management Views--- */
+.manageLinks {
+    margin-left: 2rem;
+}
+
+
+.manageLinks a {
+    /* color: var(--clr-dark1); */
+    text-decoration: underline;
+}
+
+.formMessage {
+    font-size: 1.4rem;
+    font-style: italic;
 }
 
 /* Footer */
@@ -497,6 +516,10 @@ footer {
         padding: .5rem;        
     }   
 
+    .required {        
+        font-size: 1.1rem;               
+    }
+    
     /* #inv-display {
         grid-template-columns: repeat(2, 1fr); 
       } */

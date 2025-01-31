@@ -40,6 +40,52 @@ invCont.buildByInv_id = async function (req, res, next) {
     })
 }
 
+/* ***************************
+ * Deliver Management View 
+ ****************************/
+
+invCont.buildVehicleManage =  async function (req, res, next) {
+    let nav = await utilities.getNav()
+    res.render("./inventory/management", {
+       title: "Vehicle Management",
+       nav, 
+       //need this.  EJS view could throw an error because "errors" variable is expected and not found
+       errors: null,
+    })
+}
+
+/* ***************************
+ * Deliver Add Classification View 
+ ****************************/
+
+invCont.buildAddClassification = async function (req, res, next) {
+    let nav = await utilities.getNav()
+    res.render("./inventory/add-classification", {
+       title: "Add New Vehicle Classification",
+       nav, 
+       //need this.  EJS view could throw an error because "errors" variable is expected and not found
+       errors: null,
+    })
+}
+
+/* ***************************
+ * Deliver Add Vehicle View 
+ ****************************/
+
+invCont.buildAddVehicle = async function (req, res, next) {
+    let nav = await utilities.getNav()
+    res.render("./inventory/add-vehicle", {
+       title: "Add New Vehicle",
+       nav, 
+       //need this.  EJS view could throw an error because "errors" variable is expected and not found
+       errors: null,
+    })
+}
+
+
+/* ***************************
+ * Server Error for Week 3 View 
+ ****************************/
 
 invCont.findServerError = async function (req, res, next) {
     try {

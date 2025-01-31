@@ -79,7 +79,7 @@ app.use("/account", require("./routes/accountRoute")) //can also write it like t
 
 // File Not Found Route - must be last route in list
 app.use(async (req, res, next) => {
-  // console.log("in server.js file; app.use, file not found")
+   // console.log("in server.js file; app.use, file not found")
   next({status: 404, message: 'Sorry, we appear to have lost that page.'})
 })
 

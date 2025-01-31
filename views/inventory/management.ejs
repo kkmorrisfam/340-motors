@@ -1,0 +1,13 @@
+<h1><%= title %></h1>
+<%- messages() %>
+<% if (errors) { %>
+<ul class="notice">
+    <% errors.array().forEach(error => { %>
+    <li><%= error.msg %></li>
+    <% }) %>
+  </ul>
+  <% } %>
+<div class="manageLinks">
+    <h2><a href="./add-classification.ejs" alt="Manager add new classification">Add New Classification</a></h2>
+    <h2><a href="./add-vehicle.ejs" alt="Manager add new vehicle">Add New Vehicle</a></h2>
+</div> 
