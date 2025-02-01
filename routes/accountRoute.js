@@ -34,7 +34,6 @@ router.post(
     // loginValidate.loginRules(),
     // loginValidate.checkRegData,
     // utilities.handleErrors(accountController.loginAccount)
-
 )
 
 module.exports = router;

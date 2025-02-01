@@ -14,7 +14,7 @@ invCont.buildByClassificationId = async function (req, res, next) {
     const grid = await utilities.buildClassificationGrid(data)
     let nav = await utilities.getNav()
     const className = data[0].classification_name
-    res.render("./inventory/classification", {
+    res.render("./inv/classification", {
         title: className + " vehicles",
         nav,
         grid,
@@ -82,6 +82,38 @@ invCont.buildAddVehicle = async function (req, res, next) {
     })
 }
 
+/* ******************************
+ * Add new classification
+ *******************************/
+ invCont.processNewClassification = async function (req, res) {
+    console.log("inside invCont.processNewClassification function")
+    let nav = await utilities.getNav();
+    const { classification_name } = req.body
+
+    const reqResult = await invModel.addNewClassification (
+        classification_name
+    )
+
+    if (reqResult) {
+        nav = await utilities.getNav()
+        req.flash(
+            "notice",
+            `Congratulations, ${classification_name} was added as a new classification.`
+        )
+        res.status(201).render("inventory/management", {
+            title: "Management",
+            nav,
+            errors: null,
+        })
+    } else {
+        req.flash ("notice", `Sorry, ${classification_name} did NOT get added. Please try again.`)
+        res.status(501).render("inventory/add-classification", {
+            title: "Add New Classification",
+            nav,
+            errors: null,
+        })
+    }
+}
 
 /* ***************************
  * Server Error for Week 3 View 

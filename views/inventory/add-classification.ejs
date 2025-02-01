@@ -10,12 +10,12 @@
 
   <div class="form-container border">
     
-    <form id="addClassificationForm" method="post" action="/inventory/add-classification" class="form">
+    <form id="addClassificationForm" method="post" action="/inv/add-classification" class="form">
       <div class="required">*Field is required</div>
       
       <label for="classification_name" class="top"
         >Classification Name
-        <div class="formMessage">Name must be in alphabetic characters only.</div>
+        <div class="formMessage">Name must be in alphabetic characters only. No spaces or special characters.</div>
         <input
           type="text"
           name="classification_name"
@@ -23,6 +23,7 @@
           required
           placeholder="Enter a new vehicle type"
           value="<%= locals.classification_name %>"
+          pattern="^[A-Za-z]+$"
         />
       </label>
 

@@ -4,6 +4,8 @@ const router = new express.Router()
 const invController = require("../controllers/invController")
 const utilities = require("../utilities/")
 
+console.log("Inventory routes loaded");
+
 
 // Route to build inventory by classification view
 router.get("/type/:classificationId", utilities.handleErrors(invController.buildByClassificationId));
@@ -22,6 +24,23 @@ router.get("/add-classification", utilities.handleErrors(invController.buildAddC
 
 //Route to build Add Vehicle View
 router.get("/add-vehcile", utilities.handleErrors(invController.buildAddVehicle))
+
+router.post('/add-classification', (req, res, next) => {
+    console.log("POST /add-classification route triggered");
+    next();
+});
+
+console.log("Testing function call:");
+console.log(utilities.newClassificationRules());
+
+//Route to post classification form data
+router.post(
+    //the path being watched
+    '/add-classification',     
+    utilities.newClassificationRules(),
+    utilities.checkClassificationData,    
+    utilities.handleErrors(invController.processNewClassification))
+
 
 console.log("inside routes/inventoryRoutes.js file")
 
