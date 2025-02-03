@@ -3,6 +3,36 @@ const { body, validationResult } = require("express-validator");
 const validate = {};
 const invModel = require("../models/inventory-model");
 
+
+/* ***********************************
+   * Check data and return errors
+   * or continue to Classification View
+   *************************************/
+
+// utilities.checkClassificationData = async (req, res, next) => {
+//   const { classification_name } = req.body;
+//   console.log(
+//     "inside validate.checkClassificationData in utilities/account-validation file"
+//   );
+//   let errors = [];
+//   errors = validationResult(req);
+//   console.log("param:errors in checkClassificationData", errors)
+//   if (!errors.isEmpty()) {
+//     let nav = await Util.getNav();  //need to use Util here and not "this"
+//     res.render("inventory/add-classification", {
+//       errors,
+//       title: "Add Vehicle Classification",
+//       nav,
+//       classification_name,
+//     });
+//     return;
+//   }
+//   next();
+// };
+
+
+
+
 /* **********************************
  * New Vehicle Data Validation Rules
  ************************************/
@@ -124,5 +154,6 @@ validate.checkNewVehicleData = async (req, res, next) => {
   }
   next();
 };
+
 
 module.exports = validate

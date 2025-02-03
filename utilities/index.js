@@ -152,7 +152,7 @@ Util.newClassificationRules = () => {
   Util.checkClassificationData = async (req, res, next) => {
     const { classification_name } = req.body;
     console.log(
-      "inside validate.checkClassificationData in utilities/account-validation file"
+      "inside validate.checkClassificationData in utilities/index file"
     );
     let errors = [];
     errors = validationResult(req);
