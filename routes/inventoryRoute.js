@@ -3,8 +3,9 @@ const express = require("express")
 const router = new express.Router()
 const invController = require("../controllers/invController")
 const utilities = require("../utilities/")
+const vehicleValidate = require("../utilities/form-validation")
 
-console.log("Inventory routes loaded");
+// console.log("Inventory routes loaded");
 
 
 // Route to build inventory by classification view
@@ -23,15 +24,17 @@ router.get("/management", utilities.handleErrors(invController.buildVehicleManag
 router.get("/add-classification", utilities.handleErrors(invController.buildAddClassification))
 
 //Route to build Add Vehicle View
-router.get("/add-vehcile", utilities.handleErrors(invController.buildAddVehicle))
+router.get("/add-vehicle",     
+    utilities.handleErrors(invController.buildAddVehicle))
 
-router.post('/add-classification', (req, res, next) => {
-    console.log("POST /add-classification route triggered");
-    next();
-});
+// for testing
+// router.post('/add-classification', (req, res, next) => {
+//     console.log("POST /add-classification route triggered");
+//     next();
+// });
 
-console.log("Testing function call:");
-console.log(utilities.newClassificationRules());
+// console.log("Testing function call:");
+// console.log(utilities.newClassificationRules());
 
 //Route to post classification form data
 router.post(
@@ -39,8 +42,18 @@ router.post(
     '/add-classification',     
     utilities.newClassificationRules(),
     utilities.checkClassificationData,    
-    utilities.handleErrors(invController.processNewClassification))
+    utilities.handleErrors(invController.processNewClassification)
+);
 
+
+//Route to post new vehicle form data
+router.post(
+    //path to watch
+    '/add-vehicle',
+    vehicleValidate.addVehicleRules(),
+    vehicleValidate.checkNewVehicleData,
+    utilities.handleErrors(invController.processNewVehicle)
+);
 
 console.log("inside routes/inventoryRoutes.js file")
 

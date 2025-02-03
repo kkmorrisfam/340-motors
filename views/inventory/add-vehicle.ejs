@@ -1,36 +1,123 @@
 <h1><%= title %></h1>
-<%- messages() %>
-<% if (errors) { %>
+<%- messages() %> <% if (errors) { %>
 <ul class="notice">
-    <% errors.array().forEach(error => { %>
-    <li><%= error.msg %></li>
-    <% }) %>
-  </ul>
-  <% } %>
+  <% errors.array().forEach(error => { %>
+  <li><%= error.msg %></li>
+  <% }) %>
+</ul>
+<% } %>
 
-  <div class="form-container border">
-    
-    <form id="addVehicleForm" method="post" action="/inventory/add-vehicle" class="form">
-      <div class="required">*All fields are required</div>
-      <label for="classification_id" class="top"></label>
-        //Util.buildClassificationList here 
-
-
-      <label for="classification_name" class="top"
-        >Classification Name
-        
-        <input
-          type="text"
-          name="classification_name"
-          id="classification_name"
-          required
-          placeholder="Enter a new vehicle type"
-          value="<%= locals.classification_name %>"
-        />
-      </label>
-
-      <input type="submit" value="Add Classification" class="submitBtn" />
-      
-    </form>
-  </div>
-  
+<div class="form-container border">
+  <form
+    id="addVehicleForm"
+    method="post"
+    action="/inv/add-vehicle"
+    class="form"
+  >
+    <div class="required">*All fields are required</div>
+    <label for="classification_id" class="top"
+      >Classification Name 
+      <%- classificationList %>
+    </label>
+    <label for="inv_make"
+      >Vehicle Make
+      <input
+        type="text"
+        name="inv_make"
+        id="inv_make"
+        required
+        placeholder="-min. 3 characters"
+        value="<%= locals.inv_make %>"
+      />
+    </label>
+    <label for="inv_model"
+      >Vehicle Model
+      <input
+        type="text"
+        name="inv_model"
+        id="inv_model"
+        required
+        placeholder="-min. 3 characters"
+        value="<%= locals.inv_model %>"
+      />
+    </label>
+    <label for="inv_year"
+      >Vehicle Year (YYYY)
+      <input
+        type="text"
+        name="inv_year"
+        id="inv_year"
+        required
+        placeholder="4 digit year"
+        value="<%= locals.inv_year %>"
+      />
+    </label>
+    <label for="inv_color"
+      >Vehicle Color
+      <input
+        type="text"
+        name="inv_color"
+        id="inv_color"
+        required
+        placeholder="Enter the vehicle color"
+        value="<%= locals.inv_color %>"
+      />
+    </label>
+    <label for="inv_price"
+      >Vehicle Price
+      <input
+        type="number"
+        name="inv_price"
+        id="inv_price"
+        required
+        placeholder="decimal or integer"
+        value="<%= locals.inv_price %>"
+      />
+    </label>
+    <label for="inv_miles"
+      >Vehicle Miles
+      <input
+        type="number"
+        name="inv_miles"
+        id="inv_miles"
+        required
+        placeholder="digits only"
+        value="<%= locals.inv_miles %>"
+      />
+    </label>
+    <label for="inv_description"
+      >Vehicle Description
+      <textarea
+        rows="4"
+        cols="50"
+        name="inv_description"
+        id="inv_description"
+        placeholder="Enter description here..."
+        value="<%= locals.inv_description %>"
+        required
+      >
+      </textarea>
+    </label>
+    <label for="inv_image"
+      >Image Path
+      <input
+        type="text"
+        id="inv_image"
+        name="inv_image"
+        accept=".png, .jpg, .jpeg, .webp"
+        value="/images/vehicles/no-image.png" 
+      />
+    </label>
+    <label for="inv_thumbnail"
+      >Thumbnail Path
+      <input
+        type="text"
+        id="inv_thumbnail"
+        name="inv_thumbnail"
+        accept=".png, .jpg, .jpeg, .webp"
+        value="/images/vehicles/no-image-tn.png"
+      />
+    </label>
+    <input type="submit" value="Add New Vehicle" class="submitBtn" />
+  </form>
+</div>

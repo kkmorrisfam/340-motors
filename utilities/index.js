@@ -8,10 +8,8 @@ const {body, validationResult} = require("express-validator")
  ************************** */
 Util.getNav = async function (req, res, next) {
   let data = await invModel.getClassifications();
-  //   console.log(data);
-  console.log(
-    "inside utilities/index.js in Util.getNav to build the html for invModel.getClassifications()"
-  );
+  // console.log(data);
+  console.log("inside utilities/index.js in Util.getNav -- build Nav");
   let list = "<ul>";
   list += '<li><a href="/" title="Home page">Home</a></li>';
   data.rows.forEach((row) => {
@@ -125,27 +123,6 @@ Util.buildVehicleView = async function (data) {
   return vehicleView;
 };
 
-/* ************************
- * Constructs the classification list for drop-down menu
- ************************** */
-Util.buildClassificationList = async function (classification_id = null) {
-  let data = await invModel.getClassifications();
-  let classificationList =
-    '<select name="classification_id" id="classificationList" required>';
-  classificationList += "<option value=''>Choose a Classification</option>";
-  data.rows.forEach((row) => {
-    classificationList += '<option value="' + row.classification_id + '"';
-    if (
-      classification_id != null &&
-      row.classification_id == classification_id
-    ) {
-      classificationList += " selected ";
-    }
-    classificationList += ">" + row.classification_name + "</option>";
-  });
-  classificationList += "</select>";
-  return classificationList;
-};
 
 /* **********************************
  * New Classification Data Validation Rules
@@ -162,7 +139,7 @@ Util.newClassificationRules = () => {
       .matches(/^[A-Za-z]+$/).withMessage("Please provide a valid vehicle classification name."),
   ];
 
-  console.log("Validation rules:", validationRules);
+  // console.log("Validation rules:", validationRules);
   return validationRules;
 }; 
 
@@ -192,6 +169,31 @@ Util.newClassificationRules = () => {
     }
     next();
   };
+
+/* ************************
+ * Constructs the classification list for drop-down menu
+ ************************** */
+Util.buildClassificationList = async function (classification_id = null) {
+  let data = await invModel.getClassifications();
+  let classificationList =
+    '<select name="classification_id" id="classificationList" required>';
+  classificationList += "<option value=''>Choose a Classification</option>";
+  data.rows.forEach((row) => {
+    classificationList += '<option value="' + row.classification_id + '"';
+    if (
+      classification_id != null &&
+      row.classification_id == classification_id
+    ) {
+      classificationList += " selected ";
+    }
+    classificationList += ">" + row.classification_name + "</option>";
+  });
+  classificationList += "</select>";
+  return classificationList;
+};
+
+
+
 
 /* ************************
  * Middleware For Handling Errors

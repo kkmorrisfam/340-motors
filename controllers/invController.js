@@ -14,7 +14,7 @@ invCont.buildByClassificationId = async function (req, res, next) {
     const grid = await utilities.buildClassificationGrid(data)
     let nav = await utilities.getNav()
     const className = data[0].classification_name
-    res.render("./inv/classification", {
+    res.render("./inventory/classification", {
         title: className + " vehicles",
         nav,
         grid,
@@ -73,32 +73,44 @@ invCont.buildAddClassification = async function (req, res, next) {
  ****************************/
 
 invCont.buildAddVehicle = async function (req, res, next) {
+    console.log("inside invCont.buildAddVehicle")
     let nav = await utilities.getNav()
+    const classificationList = await utilities.buildClassificationList()
     res.render("./inventory/add-vehicle", {
        title: "Add New Vehicle",
        nav, 
+       classificationList,
        //need this.  EJS view could throw an error because "errors" variable is expected and not found
        errors: null,
     })
 }
 
 /* ******************************
- * Add new classification
+ * Add new Vehicle
  *******************************/
- invCont.processNewClassification = async function (req, res) {
-    console.log("inside invCont.processNewClassification function")
+ invCont.processNewVehicle = async function (req, res) {
+    console.log("inside invCont.processNewVehicle function")
     let nav = await utilities.getNav();
-    const { classification_name } = req.body
+    const { classification_id, inv_make, inv_model, inv_year, inv_color, inv_price, inv_miles, inv_description, inv_image, inv_thumbnail } = req.body
 
-    const reqResult = await invModel.addNewClassification (
-        classification_name
+    const reqResult = await invModel.addNewVehicle (
+        classification_id,
+        inv_make,
+        inv_model,
+        inv_year,
+        inv_color,  
+        inv_price,
+        inv_miles,
+        inv_description,
+        inv_image,
+        inv_thumbnail
     )
 
     if (reqResult) {
         nav = await utilities.getNav()
         req.flash(
             "notice",
-            `Congratulations, ${classification_name} was added as a new classification.`
+            `Congratulations, ${inv_make} ${inv_model} was added to the vehicle database.`
         )
         res.status(201).render("inventory/management", {
             title: "Management",
@@ -106,9 +118,9 @@ invCont.buildAddVehicle = async function (req, res, next) {
             errors: null,
         })
     } else {
-        req.flash ("notice", `Sorry, ${classification_name} did NOT get added. Please try again.`)
-        res.status(501).render("inventory/add-classification", {
-            title: "Add New Classification",
+        req.flash ("notice", `Sorry, the new vehicle did NOT get added. Please try again.`)
+        res.status(501).render("inventory/add-vehicle", {
+            title: "Add New Vehicle",
             nav,
             errors: null,
         })
