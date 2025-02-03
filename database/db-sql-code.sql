@@ -5,7 +5,7 @@ CREATE TYPE public.account_type AS ENUM
     ('Client', 'Employee', 'Admin');
 
 ALTER TYPE public.account_type
-    OWNER TO web340;
+    OWNER TO cse340db;
 
 -- Table structure for Table 'classification'
 CREATE TABLE public.classification 
