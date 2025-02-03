@@ -64,6 +64,10 @@ async function addNewClassification(
   }
 }
 
+/* *********************
+ * Add new vehicle
+ ***********************/
+
 async function addNewVehicle(
   classification_id,
   inv_make,

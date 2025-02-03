@@ -16,10 +16,9 @@
   >
     <div class="required">*All fields are required</div>
     <label for="classification_id" class="top"
-      >Classification Name 
-      <%- classificationList %>
+      >Classification Name <%- classificationList %>
     </label>
-    <label for="inv_make"
+    <label for="inv_make" class="top"
       >Vehicle Make
       <input
         type="text"
@@ -30,7 +29,7 @@
         value="<%= locals.inv_make %>"
       />
     </label>
-    <label for="inv_model"
+    <label for="inv_model" class="top"
       >Vehicle Model
       <input
         type="text"
@@ -41,7 +40,7 @@
         value="<%= locals.inv_model %>"
       />
     </label>
-    <label for="inv_year"
+    <label for="inv_year" class="top"
       >Vehicle Year (YYYY)
       <input
         type="text"
@@ -52,7 +51,7 @@
         value="<%= locals.inv_year %>"
       />
     </label>
-    <label for="inv_color"
+    <label for="inv_color" class="top"
       >Vehicle Color
       <input
         type="text"
@@ -63,7 +62,7 @@
         value="<%= locals.inv_color %>"
       />
     </label>
-    <label for="inv_price"
+    <label for="inv_price" class="top"
       >Vehicle Price
       <input
         type="number"
@@ -74,7 +73,7 @@
         value="<%= locals.inv_price %>"
       />
     </label>
-    <label for="inv_miles"
+    <label for="inv_miles" class="top"
       >Vehicle Miles
       <input
         type="number"
@@ -85,7 +84,7 @@
         value="<%= locals.inv_miles %>"
       />
     </label>
-    <label for="inv_description"
+    <label for="inv_description" class="top"
       >Vehicle Description
       <textarea
         rows="4"
@@ -93,27 +92,30 @@
         name="inv_description"
         id="inv_description"
         placeholder="Enter description here..."
-        value="<%= locals.inv_description %>"
         required
+        minlength="5"
+        maxlength="65"
+      ><%= locals.inv_description ? locals.inv_description.trim() : '' %></textarea
       >
-      </textarea>
     </label>
-    <label for="inv_image"
+    <label for="inv_image" class="top"
       >Image Path
       <input
         type="text"
         id="inv_image"
         name="inv_image"
+        required
         accept=".png, .jpg, .jpeg, .webp"
-        value="/images/vehicles/no-image.png" 
+        value="/images/vehicles/no-image.png"
       />
     </label>
-    <label for="inv_thumbnail"
+    <label for="inv_thumbnail" class="top"
       >Thumbnail Path
       <input
         type="text"
         id="inv_thumbnail"
         name="inv_thumbnail"
+        required
         accept=".png, .jpg, .jpeg, .webp"
         value="/images/vehicles/no-image-tn.png"
       />

@@ -352,10 +352,8 @@ main {
 /*------------Forms----------- */
 .form-container {
     margin: 0 auto;
-    /* border: 1px solid #445ba9; */
-    /* border-radius: 10px; */
-    /* padding: .5rem 2%; */
     max-width: 600px;
+    /* font-size: 1.5rem; */
 }
 
 .form {
@@ -376,21 +374,29 @@ main {
 .form label {
     display: block;
     padding: 1rem;
-    font-size: 2rem;
+    font-size: 1.7rem;
 }
 
-.top input  {
+.top textarea,
+.top select,
+.top input {
     display: block;
     padding: 1rem;
     width: 100%;
     max-width: 500px;    
     border-radius: 5px;
     color: var(--clr-dark2);
+    font-size: 1.4rem;
 }
+
+#inv_description:required:invalid, #inv_description:focus:invalid, 
+select:required:invalid, select:focus:invalid,
 input:required:invalid, input:focus:invalid {
     background-color: var(--clr-light3);
 }
 
+#inv_description:required:valid, 
+select:required:valid,
 input:required:valid {
     background-color: white ;
 }
