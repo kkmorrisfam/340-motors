@@ -13,7 +13,8 @@ invCont.buildByClassificationId = async function (req, res, next) {
     const data = await invModel.getInventoryByClassificationId(classification_id)
     const grid = await utilities.buildClassificationGrid(data)
     let nav = await utilities.getNav()
-    const className = data[0].classification_name
+    // const className = data[0].classification_name
+    const className = (data !== undefined && data.length > 0) ? data[0].classification_name : "Unknown";
     res.render("./inventory/classification", {
         title: className + " vehicles",
         nav,
@@ -52,6 +53,37 @@ invCont.buildVehicleManage =  async function (req, res, next) {
        //need this.  EJS view could throw an error because "errors" variable is expected and not found
        errors: null,
     })
+}
+
+/* ******************************
+ * Add new classification
+ *******************************/
+invCont.processNewClassification = async function (req, res) {
+    console.log("inside invCont.processNewClassification function")
+    let nav = await utilities.getNav();
+    const { classification_name } = req.body
+    const reqResult = await invModel.addNewClassification (
+        classification_name
+    )
+    if (reqResult) {
+        nav = await utilities.getNav()
+        req.flash(
+            "notice",
+            `Congratulations, ${classification_name} was added as a new classification.`
+        )
+        res.status(201).render("inventory/management", {
+            title: "Management",
+            nav,
+            errors: null,
+        })
+    } else {
+        req.flash ("notice", `Sorry, ${classification_name} did NOT get added. Please try again.`)
+        res.status(501).render("inventory/add-classification", {
+            title: "Add New Classification",
+            nav,
+            errors: null,
+        })
+    }
 }
 
 /* ***************************

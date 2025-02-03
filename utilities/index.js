@@ -33,7 +33,7 @@ Util.getNav = async function (req, res, next) {
  ************************** */
 
 Util.buildClassificationGrid = async function (data) {
-  let grid;
+  let grid ='';
   console.log(
     "inside utilities/index.js Util.buildClassificaitonGrid function to build html grid/vehicle cards by classification"
   );
