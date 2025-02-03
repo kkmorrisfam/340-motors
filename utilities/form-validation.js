@@ -7,6 +7,7 @@ const invModel = require("../models/inventory-model");
 /* ***********************************
    * Check data and return errors
    * or continue to Classification View
+   * move this here?
    *************************************/
 
 // utilities.checkClassificationData = async (req, res, next) => {

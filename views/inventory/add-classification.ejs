@@ -13,9 +13,7 @@
     <form id="addClassificationForm" method="post" action="/inv/add-classification" class="form">
       <div class="required">*Field is required</div>
       
-      <label for="classification_name" class="top"
-        >Classification Name
-        <div class="formMessage">Name must be in alphabetic characters only. No spaces or special characters.</div>
+      <label for="classification_name" class="top">Classification Name        
         <input
           type="text"
           name="classification_name"
@@ -23,12 +21,9 @@
           required
           placeholder="Enter a new vehicle type"
           value="<%= locals.classification_name %>"
-          pattern="^[A-Za-z]+$"
-        />
-      </label>
-
-      <input type="submit" value="Add Classification" class="submitBtn" />
-      
+          pattern="^[A-Za-z]+$"/></label>
+        <div class="formMessage">Name must be in alphabetic characters only. No spaces or special characters.</div>
+      <input type="submit" value="Add Classification" class="submitBtn" />      
     </form>
   </div>
   
