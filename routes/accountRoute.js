@@ -5,7 +5,7 @@ const router = new express.Router()
 const accountController = require("../controllers/accountController")
 const utilities = require("../utilities/")
 const regValidate = require('../utilities/account-validation')
-const loginValidate = require('../utilities/account-validation')
+// const loginValidate = require('../utilities/account-validation')
 
 // the server.js file has the "/account" part of the path, then sends it to this file.  When the route
 // also has "/login" after "/account"  it then adds the 
@@ -26,14 +26,14 @@ router.post(
 // process the login attempt
 router.post(
     "/login",
-    (req, res) => {
-        res.status(200).send('login process')
-    }
+    // (req, res) => {
+    //     res.status(200).send('login process')
+    // }
     
     //need to build loginAccount first
-    // loginValidate.loginRules(),
-    // loginValidate.checkRegData,
-    // utilities.handleErrors(accountController.loginAccount)
+    regValidate.loginRules(),
+    regValidate.checkLoginData,
+    utilities.handleErrors(accountController.accountLogin)
 )
 
 module.exports = router;
