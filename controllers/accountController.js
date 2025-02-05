@@ -143,4 +143,19 @@ async function accountLogin(req, res) {
   }
 }
 
-module.exports = { buildLogin, buildRegister, registerAccount, accountLogin };
+/* ***************************
+ * Deliver Account Management View 
+ ****************************/
+
+ async function buildAccountManage (req, res, next) {
+    console.log("buildAccountManage view")
+    let nav = await utilities.getNav()
+    res.render("account/accounts", {
+       title: "Account Management",
+       nav, 
+       //need this.  EJS view could throw an error because "errors" variable is expected and not found
+       errors: null,
+    })
+}
+
+module.exports = { buildLogin, buildRegister, registerAccount, accountLogin, buildAccountManage };

@@ -16,6 +16,9 @@ router.get("/login", utilities.handleErrors(accountController.buildLogin));
 //add route for registration page
 router.get("/register", utilities.handleErrors(accountController.buildRegister));
 
+//add route for account management page
+router.get("/",utilities.checkLogin, utilities.handleErrors(accountController.buildAccountManage));
+
 // add route to post registration form
 router.post(
     '/register', 
