@@ -33,7 +33,7 @@ async function getInventoryByClassificationId(classification_id) {
 
 async function getInventoryByInv_id(inv_id) {
   try {
-    console.log("inside models/inventory-model.js file in getInventoryByInv_id function to run SQL")
+    console.log("inside models/inventory-model.js file in getInventoryByInv_id function to run SQ + inv_id: ", inv_id)
     const data = await pool.query(
       `SELECT * FROM public.inventory
       WHERE inv_id = $1`,
@@ -97,6 +97,45 @@ async function addNewVehicle(
     ]);
   } catch (error) {
     return error.message;
+  }
+}
+
+/* *********************
+ * Edit/Update vehicle inventory
+ ***********************/
+
+async function updateVehicle(
+  classification_id,
+  inv_make,
+  inv_model,
+  inv_year,
+  inv_color,  
+  inv_price,
+  inv_miles,
+  inv_description,
+  inv_image,
+  inv_thumbnail,
+  inv_id
+) {
+  try {
+    const sql =
+      "UPDATE public.inventory SET classification_id = $1, inv_make = $2, inv_model = $3, inv_year = $4, inv_color = $5, inv_price = $6, inv_miles = $7, inv_description = $8, inv_image = $9, inv_thumbnail = $10  WHERE inv_id = $11 RETURNING *" 
+    const data = await pool.query(sql, [
+      classification_id,
+      inv_make,
+      inv_model,
+      inv_year,
+      inv_color,  
+      inv_price,
+      inv_miles,
+      inv_description,
+      inv_image,
+      inv_thumbnail,
+      inv_id
+    ])
+    return data.rows[0]
+  } catch (error) {
+    console.error("model error: " + error);
   }
 }
 

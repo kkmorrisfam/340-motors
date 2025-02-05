@@ -128,8 +128,8 @@ validate.checkNewVehicleData = async (req, res, next) => {
   console.log(
     "inside validate.checkNewVehicleData in utilities/form-validation file"
   );
-  console.log(inv_make)
-  console.log(inv_thumbnail)
+  // console.log(inv_make)
+  // console.log(inv_thumbnail)
   let errors = [];
   errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -150,6 +150,57 @@ validate.checkNewVehicleData = async (req, res, next) => {
       inv_description,
       inv_image,
       inv_thumbnail,
+    });    
+    return;
+  }
+  next();
+};
+
+/* ***********************************
+ * Check update vehcile data and return errors
+ * or continue to back to edit view
+ *************************************/
+
+validate.checkUpdateData = async (req, res, next) => {
+  const {
+    classification_id,
+    inv_make,
+    inv_model,
+    inv_year,
+    inv_color,
+    inv_price,
+    inv_miles,
+    inv_description,
+    inv_image,
+    inv_thumbnail,
+    inv_id
+  } = req.body;
+  console.log(
+    "inside validate.checkNewVehicleData in utilities/form-validation file"
+  );
+  // console.log(inv_make)
+  // console.log(inv_thumbnail)
+  let errors = [];
+  errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    let nav = await utilities.getNav();
+    let classificationList = await utilities.buildClassificationList(classification_id);
+    res.render("inventory/edit-vehicle", {
+      errors,
+      title: `Edit ${inv_make} ${inv_model}`,
+      nav,
+      classificationList,
+      classification_id,
+      inv_make,
+      inv_model,
+      inv_year,
+      inv_color,
+      inv_price,
+      inv_miles,
+      inv_description,
+      inv_image,
+      inv_thumbnail,
+      inv_id
     });    
     return;
   }

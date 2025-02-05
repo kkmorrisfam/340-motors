@@ -27,14 +27,11 @@ router.get("/add-classification", utilities.handleErrors(invController.buildAddC
 router.get("/add-vehicle",     
     utilities.handleErrors(invController.buildAddVehicle))
 
-// for testing
-// router.post('/add-classification', (req, res, next) => {
-//     console.log("POST /add-classification route triggered");
-//     next();
-// });
+//Route to display inventory for update/delete
+router.get("/getInventory/:classification_id", utilities.handleErrors(invController.getInventoryJSON))
 
-// console.log("Testing function call:");
-// console.log(utilities.newClassificationRules());
+//Route to edit or modify inventory
+router.get("/edit/:inv_id", utilities.handleErrors(invController.buildModifyVehicleView))
 
 //Route to post classification form data
 router.post(
@@ -54,6 +51,14 @@ router.post(
     vehicleValidate.checkNewVehicleData,
     utilities.handleErrors(invController.processNewVehicle)
 );
+
+//Route to post modification of vehicle form data
+router.post(
+    '/update/',
+    vehicleValidate.addVehicleRules(),
+    vehicleValidate.checkUpdateData,
+    utilities.handleErrors(invController.processUpdateVehicle)
+)
 
 console.log("inside routes/inventoryRoutes.js file")
 
