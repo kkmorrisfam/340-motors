@@ -239,6 +239,7 @@ invCont.buildModifyVehicleView = async function (req, res, next) {
 
 /* ******************************
  * Update Vehicle data
+ * aka invCont.updateVehicle
  *******************************/
 invCont.processUpdateVehicle = async function (req, res, next) {
   console.log("inside invCont.processUpdateVehicle function");
@@ -270,7 +271,7 @@ invCont.processUpdateVehicle = async function (req, res, next) {
     inv_thumbnail,
     inv_id
   );
-
+  console.log("updateResult in invCont.processUpdateVehicle: ", updateResult)
   if (updateResult) {
     const itemName = updateResult.inv_make + " " + updateResult.inv_model;
     nav = await utilities.getNav();

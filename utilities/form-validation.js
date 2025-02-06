@@ -176,12 +176,13 @@ validate.checkUpdateData = async (req, res, next) => {
     inv_id
   } = req.body;
   console.log(
-    "inside validate.checkNewVehicleData in utilities/form-validation file"
+    "inside validate.checkUpdateData in utilities/form-validation file"
   );
   // console.log(inv_make)
   // console.log(inv_thumbnail)
   let errors = [];
   errors = validationResult(req);
+  console.log("inside checkUpdateData errors: ", errors)
   if (!errors.isEmpty()) {
     let nav = await utilities.getNav();
     let classificationList = await utilities.buildClassificationList(classification_id);

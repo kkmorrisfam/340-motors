@@ -1,4 +1,5 @@
 const pool = require("../database/")
+const { checkUpdateData } = require("../utilities/form-validation")
 
 /**************************
  * Get all classification data
@@ -140,4 +141,4 @@ async function updateVehicle(
 }
 
 
-module.exports = {getClassifications, getInventoryByClassificationId, getInventoryByInv_id, addNewClassification, addNewVehicle};
+module.exports = {getClassifications, getInventoryByClassificationId, getInventoryByInv_id, addNewClassification, addNewVehicle, updateVehicle};
