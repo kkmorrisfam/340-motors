@@ -39,7 +39,7 @@ function buildInventoryList(data) {
         console.log(element.inv_id + ", " + element.inv_model);
         dataTable += `<tr><td>${element.inv_make} ${element.inv_model}</td>`;
         dataTable += `<td><a href='/inv/edit/${element.inv_id}' title='Click to update'>Modify</a></td>`;
-        dataTable += `<td><a href='inv/delete/${element.inv_id}' title = 'Click to delete'>Delete</a></td></tr>`;
+        dataTable += `<td><a href='/inv/delete/${element.inv_id}' title = 'Click to delete'>Delete</a></td></tr>`;
     })
     dataTable += '</tbody>';
     //Display the contents in hte Inventory Management View

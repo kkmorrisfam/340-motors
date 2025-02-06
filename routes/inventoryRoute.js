@@ -27,7 +27,7 @@ router.get("/add-classification", utilities.handleErrors(invController.buildAddC
 router.get("/add-vehicle",     
     utilities.handleErrors(invController.buildAddVehicle))
 
-//Route to display inventory for update/delete
+//Route to display inventory for update in a table
 router.get("/getInventory/:classification_id", utilities.handleErrors(invController.getInventoryJSON))
 
 //Route to edit or modify inventory
@@ -37,8 +37,8 @@ router.get("/edit/:inv_id", utilities.handleErrors(invController.buildModifyVehi
 router.post(
     //the path being watched
     '/add-classification',     
-    utilities.newClassificationRules(),
-    utilities.checkClassificationData,    
+    vehicleValidate.newClassificationRules(),
+    vehicleValidate.checkClassificationData,    
     utilities.handleErrors(invController.processNewClassification)
 );
 
@@ -59,6 +59,14 @@ router.post(
     vehicleValidate.checkUpdateData,
     utilities.handleErrors(invController.processUpdateVehicle)
 )
+
+//Route to form data to delete vehicle
+router.get('/delete/:inv_id', utilities.handleErrors(invController.buildDeleteVehicleView))
+
+//Route to post and delete data from database
+router.post(
+    '/delete/',     
+    utilities.handleErrors(invController.processDeleteVehicle))
 
 console.log("inside routes/inventoryRoutes.js file")
 

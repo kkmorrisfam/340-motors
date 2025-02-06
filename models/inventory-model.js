@@ -1,5 +1,5 @@
 const pool = require("../database/")
-const { checkUpdateData } = require("../utilities/form-validation")
+// const { checkUpdateData } = require("../utilities/form-validation")
 
 /**************************
  * Get all classification data
@@ -140,5 +140,22 @@ async function updateVehicle(
   }
 }
 
+/* *********************
+ * Delete vehicle inventory
+ * aka deleteInventoryItem
+ ***********************/
 
-module.exports = {getClassifications, getInventoryByClassificationId, getInventoryByInv_id, addNewClassification, addNewVehicle, updateVehicle};
+async function deleteVehicle(inv_id) {
+  console.log("invModel.inside deleteVehicle inv_id: ", inv_id)
+  try {
+    const sql =
+      "DELETE FROM public.inventory WHERE inv_id = $1" 
+    const data = await pool.query(sql, [inv_id])
+    return data
+  } catch (error) {
+    console.error("Delete Inventory error");
+  }
+}
+
+
+module.exports = {getClassifications, getInventoryByClassificationId, getInventoryByInv_id, addNewClassification, addNewVehicle, updateVehicle, deleteVehicle};

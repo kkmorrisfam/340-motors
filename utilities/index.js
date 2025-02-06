@@ -125,52 +125,6 @@ Util.buildVehicleView = async function (data) {
 };
 
 
-/* **********************************
- * New Classification Data Validation Rules
- ************************************/
-
-Util.newClassificationRules = () => {
-  console.log("inside router.post for validation within Util.newClassificationRules function");
-  
-  const validationRules = [
-    body("classification_name")
-      .trim()
-      .escape()
-      .notEmpty().withMessage("The field was empty. Try again.").bail()      
-      .matches(/^[A-Za-z]+$/).withMessage("Please provide a valid vehicle classification name."),
-  ];
-
-  // console.log("Validation rules:", validationRules);
-  return validationRules;
-}; 
-
-
-  /* ***********************************
-   * Check data and return errors
-   * or continue to Classification View
-   *************************************/
-
-  Util.checkClassificationData = async (req, res, next) => {
-    const { classification_name } = req.body;
-    console.log(
-      "inside validate.checkClassificationData in utilities/index file"
-    );
-    let errors = [];
-    errors = validationResult(req);
-    console.log("param:errors in checkClassificationData", errors)
-    if (!errors.isEmpty()) {
-      let nav = await Util.getNav();  //need to use Util here and not "this"
-      res.render("inventory/add-classification", {
-        errors,
-        title: "Add Vehicle Classification",
-        nav,
-        classification_name,
-      });
-      return;
-    }
-    next();
-  };
-
 /* ************************
  * Constructs the classification list for drop-down menu
  ************************** */
@@ -199,7 +153,7 @@ Util.buildClassificationList = async function (classification_id = null) {
 ******************************************/
 Util.checkJWTToken = (req, res, next) => {
   if (req.cookies.jwt) {
-    console.log(req.cookies.jwt)
+    // console.log(req.cookies.jwt)
     jwt.verify(
       req.cookies.jwt, 
       process.env.ACCESS_TOKEN_SECRET, 
