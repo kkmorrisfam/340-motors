@@ -336,26 +336,27 @@ invCont.buildDeleteVehicleView = async function (req, res, next) {
  * aka invCont.deleteVehicle
  *******************************/
 invCont.processDeleteVehicle = async function (req, res, next) {
-  // const {    
-  //   inv_make,
-  //   inv_model,
-  //   inv_year,    
-  //   inv_price,
-  // } = req.body;  
+// Log request body
+// console.log("req.body:", req.body);
+  const {    
+    inv_make,
+    inv_model,    
+  } = req.body;  
   
   console.log("inside invCont.processDeleteVehicle function");
   let nav = await utilities.getNav();
-  const inv_id = parseInt(req.params.inv_id);
-  console.log("inv_id: ", inv_id)
+  const inv_id = parseInt(req.body.inv_id);  
+  // console.log("inv_id: ", inv_id)
   const deleteThisOne = await invModel.deleteVehicle(inv_id);
-  console.log("deleteThisOne in invCont.processDeleteVehicle: ", deleteThisOne)
+  // console.log("deleteThisOne in invCont.processDeleteVehicle: ", deleteThisOne)
+  const itemName = `${inv_make} ${inv_model}`;
   if (deleteThisOne) {
-    const itemName = deleteThisOne.inv_make + " " + deleteThisOne.inv_model;
+    // const itemName = inv_make + " " + inv_model;
     nav = await utilities.getNav();
     req.flash("notice", `The ${itemName} was successfully deleted.`);
     res.redirect("/inv/management");
   } else {    
-    const itemName = `${inv_make} ${inv_model}`;
+    
     req.flash("notice", `Sorry, the delete failed.`);
     res.status(501).render("inventory/delete-vehicle", {
       title: "Delete " + itemName,
