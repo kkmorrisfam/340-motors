@@ -5,19 +5,21 @@ const router = new express.Router()
 const accountController = require("../controllers/accountController")
 const utilities = require("../utilities/")
 const regValidate = require('../utilities/account-validation')
-// const loginValidate = require('../utilities/account-validation')
+
 
 // the server.js file has the "/account" part of the path, then sends it to this file.  When the route
 // also has "/login" after "/account"  it then adds the 
 // instruction to go run the buildLogin function in the accountController file
-console.log("inside accountRoute")
+// console.log("inside accountRoute")
 router.get("/login", utilities.handleErrors(accountController.buildLogin));
 
 //add route for registration page
 router.get("/register", utilities.handleErrors(accountController.buildRegister));
 
+
+
 //add route for account management page
-router.get("/",utilities.checkLogin, utilities.handleErrors(accountController.buildAccountManage));
+router.get("/", utilities.checkLogin, utilities.handleErrors(accountController.buildAccountManage));
 
 // add route to post registration form
 router.post(

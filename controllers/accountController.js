@@ -97,7 +97,7 @@ async function accountLogin(req, res) {
 
   const accountData = await accountModel.getAccountByEmail(account_email);
 
-  // check credentials
+  // check credentials  if no user matches email, return to login page
   if (!accountData) {
     req.flash("notice", "Please check your credentials and try again.");
     res.status(400).render("account/login", {
@@ -108,17 +108,30 @@ async function accountLogin(req, res) {
     });
     return;
   }
+  //if accountData exists, then try to compare passwords, the one entered with
+  //the hash version stored, and run bcrypt
+  //create jwt token and save it in accessToken
   try {
     if (await bcrypt.compare(account_password, accountData.account_password)) {
       delete accountData.account_password;
+      //sign the user with jwt
       const accessToken = jwt.sign(
-        accountData,
+        // accountData,
+        {
+          account_id: accountData.account_id,
+          account_firstname: accountData.account_firstname,
+          account_email: accountData.account_email,
+          account_type: accountData.account_type, 
+        },
         process.env.ACCESS_TOKEN_SECRET,
         { expiresIn: 3600 * 1000 }
       );
+
+      //set res.cookie with accessToken
       if (process.env.NODE_ENV === "development") {
         res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 });
-      } else {
+      } // setting httpOnly says that javascript can't be used 
+      else {
         res.cookie("jwt", accessToken, {
           httpOnly: true,
           secure: true,
@@ -126,7 +139,8 @@ async function accountLogin(req, res) {
         });
       }
       return res.redirect("/account");
-    } else {
+    } //if passwords don't match, send back to login page 
+    else {
       req.flash(
         "message notice",
         "Please check your credentials and try again."

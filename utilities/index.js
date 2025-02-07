@@ -154,6 +154,7 @@ Util.buildClassificationList = async function (classification_id = null) {
 Util.checkJWTToken = (req, res, next) => {
   if (req.cookies.jwt) {
     // console.log(req.cookies.jwt)
+    
     jwt.verify(
       req.cookies.jwt, 
       process.env.ACCESS_TOKEN_SECRET, 
@@ -165,12 +166,31 @@ Util.checkJWTToken = (req, res, next) => {
         }
         res.locals.accountData = accountData
         res.locals.loggedin = 1
+        res.locals.authUser = accountData
+        req.user = accountData   //Store user data in req.user for easy access
+        console.log("req.user: ", req.user)
         next()
       })
   } else {
+    req.user = null;  //set to null if no JWT 
+    res.locals.authUser = null;
     next()
   }
 }
+
+/*****************************************
+ * Middleware to check account_type
+******************************************/
+Util.authorizeRoles = (...allowedRoles) => {
+  return (req, res, next) => {
+    if (!req.user || !allowedRoles.includes(req.user.account_type)) {
+      req.flash("notice", "Unauthorized access.");
+      // res.status(403)
+      return res.redirect("/account/login");
+    }
+    next();
+  };
+};
 
 
 /*******************************

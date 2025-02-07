@@ -17,26 +17,33 @@ router.get("/detail/:inv_id", utilities.handleErrors(invController.buildByInv_id
 // Route to build test data -> throws 500 error
 router.get("/error/:inv_id", utilities.handleErrors(invController.findServerError));
 
+// Routes needing authorization:
+
 //Route to build management view
-router.get("/management", utilities.handleErrors(invController.buildVehicleManage));
+router.get("/management", utilities.checkJWTToken, utilities.authorizeRoles("Admin", "Employee"), 
+    utilities.handleErrors(invController.buildVehicleManage));
 
 //Route to build Add Classification View
-router.get("/add-classification", utilities.handleErrors(invController.buildAddClassification))
+router.get("/add-classification", utilities.checkJWTToken, utilities.authorizeRoles("Admin", "Employee"),   
+    utilities.handleErrors(invController.buildAddClassification))
 
 //Route to build Add Vehicle View
-router.get("/add-vehicle",     
+router.get("/add-vehicle", utilities.checkJWTToken, utilities.authorizeRoles("Admin", "Employee"),    
     utilities.handleErrors(invController.buildAddVehicle))
 
 //Route to display inventory for update in a table
-router.get("/getInventory/:classification_id", utilities.handleErrors(invController.getInventoryJSON))
+router.get("/getInventory/:classification_id", utilities.checkJWTToken, utilities.authorizeRoles("Admin", "Employee"),
+    utilities.handleErrors(invController.getInventoryJSON))
 
 //Route to edit or modify inventory
-router.get("/edit/:inv_id", utilities.handleErrors(invController.buildModifyVehicleView))
+router.get("/edit/:inv_id", utilities.checkJWTToken, utilities.authorizeRoles("Admin", "Employee"),
+    utilities.handleErrors(invController.buildModifyVehicleView))
 
 //Route to post classification form data
 router.post(
     //the path being watched
-    '/add-classification',     
+    '/add-classification', 
+    utilities.checkJWTToken, utilities.authorizeRoles("Admin", "Employee"),    
     vehicleValidate.newClassificationRules(),
     vehicleValidate.checkClassificationData,    
     utilities.handleErrors(invController.processNewClassification)
@@ -47,6 +54,7 @@ router.post(
 router.post(
     //path to watch
     '/add-vehicle',
+    utilities.checkJWTToken, utilities.authorizeRoles("Admin", "Employee"),
     vehicleValidate.addVehicleRules(),
     vehicleValidate.checkNewVehicleData,
     utilities.handleErrors(invController.processNewVehicle)
@@ -55,17 +63,19 @@ router.post(
 //Route to post modification of vehicle form data
 router.post(
     '/update/',
+    utilities.checkJWTToken, utilities.authorizeRoles("Admin", "Employee"),
     vehicleValidate.addVehicleRules(),
     vehicleValidate.checkUpdateData,
     utilities.handleErrors(invController.processUpdateVehicle)
 )
 
 //Route to form data to delete vehicle
-router.get('/delete/:inv_id', utilities.handleErrors(invController.buildDeleteVehicleView))
+router.get('/delete/:inv_id', utilities.checkJWTToken, utilities.authorizeRoles("Admin", "Employee"),
+    utilities.handleErrors(invController.buildDeleteVehicleView))
 
 //Route to post and delete data from database
 router.post(
-    '/delete/',     
+    '/delete/', utilities.checkJWTToken, utilities.authorizeRoles("Admin", "Employee"),    
     utilities.handleErrors(invController.processDeleteVehicle))
 
 console.log("inside routes/inventoryRoutes.js file")
