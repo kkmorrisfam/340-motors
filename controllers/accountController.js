@@ -164,12 +164,41 @@ async function accountLogin(req, res) {
  async function buildAccountManage (req, res, next) {
     console.log("buildAccountManage view")
     let nav = await utilities.getNav()
+
+    if (!req.user) {
+      req.flash("notice", "Please log in to access your account")
+      return res.redirect("/account/login");
+    }
+
     res.render("account/accounts", {
        title: "Account Management",
        nav, 
        //need this.  EJS view could throw an error because "errors" variable is expected and not found
        errors: null,
+       account_firstname: req.user.account_firstname,
+       account_id: req.user.account_id,
+       account_type: req.user.account_type
     })
 }
 
-module.exports = { buildLogin, buildRegister, registerAccount, accountLogin, buildAccountManage };
+async function buildUpdateAccount (req, res, next) {
+  let nav = await utilities.getNav()
+  const account_id = req.params.account_id
+
+  // check credential match
+  if(req.user.account_id != account_id) {
+    req.flash("notice", "Unauthorized access.")
+    return res.redirect("/account")
+  }
+
+  res.render("account/update-account", {
+    title: "Update Account Information",
+    nav,
+    errors: null,
+    account_firstname: req.user.account_firstname,
+    account_lastname: req.user.account_lastname,
+    account_email: req.user.account_email
+  })
+}
+
+module.exports = { buildLogin, buildRegister, registerAccount, accountLogin, buildAccountManage, buildUpdateAccount };

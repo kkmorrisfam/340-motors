@@ -21,6 +21,9 @@ router.get("/register", utilities.handleErrors(accountController.buildRegister))
 //add route for account management page
 router.get("/", utilities.checkLogin, utilities.handleErrors(accountController.buildAccountManage));
 
+//add Udpate Account Route
+router.get("/update/:account_id", utilities.checkJWTToken, utilities.handleErrors(accountController.buildUpdateAccount))
+
 // add route to post registration form
 router.post(
     '/register', 
