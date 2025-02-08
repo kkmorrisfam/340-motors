@@ -173,8 +173,7 @@ async function accountLogin(req, res) {
 
     res.render("account/accounts", {
        title: "Account Management",
-       nav, 
-       //need this.  EJS view could throw an error because "errors" variable is expected and not found
+       nav,        
        errors: null,
        account_firstname: req.user.account_firstname,
        account_id: req.user.account_id,
@@ -201,6 +200,107 @@ async function buildUpdateAccount (req, res, next) {
     account_email: req.user.account_email
   })
 }
+
+/* ******************************
+ * Process Change Account Info
+ *******************************/
+
+async function changeAccountInfo(req, res) {
+  let nav = await utilities.getNav();
+  const {
+    account_firstname,
+    account_lastname,
+    account_email    
+  } = req.body;
+
+  //Hash the password before storing
+  let hashedPassword;
+  try {
+    // regular password and cost (salt is generated automatically)
+    hashedPassword = await bcrypt.hashSync(account_password, 10);
+  } catch {
+    req.flash(
+      "notice",
+      "Sorry, there was an error processing the registration."
+    );
+    res.status(500).render("account/register", {
+      title: "Registration",
+      nav,
+      errors: null,
+    });
+  }
+
+  const reqResult = await accountModel.registerAccount(
+    account_firstname,
+    account_lastname,
+    account_email,
+    hashedPassword
+  );
+
+  if (reqResult) {
+    req.flash(
+      "notice",
+      `Congratulations, you\'re registered ${account_firstname}, Please log in.`
+    );
+    res.status(201).render("account/login", {
+      title: "Login",
+      nav,
+    });
+  } else {
+    req.flash("notice", "Sorry, the registration failed.");
+    res.status(501).render("account/register", {
+      title: "Registration",
+      nav,
+    });
+  }
+}
+
+/* ******************************
+ * Process Change Password
+ *******************************/
+
+async function changePassword(req, res) {
+  let nav = await utilities.getNav();
+  const account_password  = req.body;
+
+  //Hash the password before storing
+  let hashedPassword;
+  try {
+    // regular password and cost (salt is generated automatically)
+    hashedPassword = await bcrypt.hashSync(account_password, 10);
+  } catch {
+    req.flash(
+      "notice",
+      "Sorry, there was an error processing the password update."
+    );
+    res.status(500).render("account/accounts", {
+      title: "Account Management",
+      nav,
+      errors: null,
+    });
+  }
+
+  const reqResult = await accountModel.updatePassword(hashedPassword);
+
+  if (reqResult) {
+    req.flash(
+      "notice",
+      `Congratulations, you\'ve changed your password ${account_firstname}`
+    );
+    res.status(201).render("account/accounts", {
+      title: "Account Management",
+      nav,
+    });
+  } else {
+    req.flash("notice", "Sorry, the registration failed.");
+    res.status(501).render("account/accounts", {
+      title: "Account Management",
+      nav,
+    });
+  }
+}
+
+
 
 async function handleLogout(req, res) {
   res.clearCookie("jwt")

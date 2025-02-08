@@ -54,4 +54,54 @@ async function getAccountByEmail(account_email) {
   }
 }
 
+/* *********************
+ * Update account info
+ ***********************/
+
+async function updateAccountInfo(
+  account_firstname,
+  account_lastname,
+  account_email,
+  account_id
+) {
+  try {
+    const sql =
+      "INSERT INTO account (account_firstname, account_lastname, account_email, account_password, account_type) VALUES ($1, $2, $3, $4, 'Client') RETURNING *";
+    return await pool.query(sql, [
+      account_firstname,
+      account_lastname,
+      account_email,
+      account_password,
+    ]);
+  } catch (error) {
+    return error.message;
+  }
+}
+
+
+/* *********************
+ * Update new password
+ ***********************/
+
+async function updatePassword(
+  account_firstname,
+  account_lastname,
+  account_email,
+  account_password
+) {
+  try {
+    const sql =
+      "INSERT INTO account (account_firstname, account_lastname, account_email, account_password, account_type) VALUES ($1, $2, $3, $4, 'Client') RETURNING *";
+    return await pool.query(sql, [
+      account_firstname,
+      account_lastname,
+      account_email,
+      account_password,
+    ]);
+  } catch (error) {
+    return error.message;
+  }
+}
+
+
 module.exports = { registerAccount, checkExistingEmail, getAccountByEmail };
