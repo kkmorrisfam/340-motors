@@ -120,6 +120,7 @@ async function accountLogin(req, res) {
         {
           account_id: accountData.account_id,
           account_firstname: accountData.account_firstname,
+          account_lastname: accountData.account_lastname,
           account_email: accountData.account_email,
           account_type: accountData.account_type, 
         },
@@ -190,8 +191,8 @@ async function buildUpdateAccount (req, res, next) {
     req.flash("notice", "Unauthorized access.")
     return res.redirect("/account")
   }
-
-  res.render("account/update-account", {
+  
+  res.render("account/update", {
     title: "Account Update",
     nav,
     errors: null,
