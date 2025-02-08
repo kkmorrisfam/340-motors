@@ -44,7 +44,7 @@ router.post(
 
 // add routes post updates to account information and password
 router.post(
-    '/update',
+    '/update-info',
     utilities.checkJWTToken,
     regValidate.updateAccountInfoRules(),
     regValidate.checkAccountUpdateData,
@@ -52,7 +52,7 @@ router.post(
 )
 
 router.post(
-    '/update',
+    '/update-password',
     utilities.checkJWTToken,
     regValidate.updatePasswordRules(),
     regValidate.checkPassword,

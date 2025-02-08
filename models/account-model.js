@@ -37,20 +37,37 @@ async function checkExistingEmail(account_email) {
   }
 }
 
+/* ************************
+ * Check for existing email by Id
+ **************************/
+
+async function checkExistingEmailById(account_email, account_id) {
+  try {
+    console.log("inside checkExistingEmailById 1")
+    const sql =
+      "SELECT * FROM account WHERE account_email = $1 AND account_id != $2 RETURNING *";
+    const email = await pool.query(sql, [account_email, account_id]);
+    console.log("inside checkExistingEmailById 2")
+    return email.rowCount;
+  } catch (error) {
+    return error.message;
+  }
+}
+
 /**************************
  * Return account data using
  * email address
-**************************** */
+ **************************** */
 
 async function getAccountByEmail(account_email) {
   try {
     const result = await pool.query(
-      'SELECT account_id, account_firstname, account_lastname, account_email, account_type, account_password FROM account WHERE account_email = $1',
-      [account_email])
-      return result.rows[0]
-    
+      "SELECT account_id, account_firstname, account_lastname, account_email, account_type, account_password FROM account WHERE account_email = $1",
+      [account_email]
+    );
+    return result.rows[0];
   } catch (error) {
-    return new Error("No matching email found")
+    return new Error("No matching email found");
   }
 }
 
@@ -71,30 +88,25 @@ async function updateAccountInfo(
       account_firstname,
       account_lastname,
       account_email,
-      account_id
+      account_id,
     ]);
   } catch (error) {
     return error.message;
   }
 }
 
-
 /* *********************
  * Update new password
  ***********************/
 
-async function updatePassword(
-    account_password,
-    account_id
-) {
+async function updatePassword(account_password, account_id) {
+  console.log("inside updatePassword in model")
   try {
     const sql =
       "UPDATE public.account SET account_password = $1 WHERE account_id = $2 RETURNING *";
-    return await pool.query(sql, [      
-      account_password,
-      account_id
-    ]);
+    return await pool.query(sql, [account_password, account_id]);
   } catch (error) {
+    console.log("error running updatePassword query")
     return error.message;
   }
 }
@@ -102,25 +114,26 @@ async function updatePassword(
 /**************************
  * Return account data using
  * account id
-**************************** */
+ **************************** */
 
 async function getAccountById(account_id) {
   try {
     const result = await pool.query(
-      'SELECT account_id, account_firstname, account_lastname, account_email, account_type, account_password FROM account WHERE account_id = $1',
-      [account_email])
-      return result.rows[0]
-    
+      "SELECT account_id, account_firstname, account_lastname, account_email, account_type, account_password FROM account WHERE account_id = $1",
+      [account_id]
+    );
+    return result.rows[0];
   } catch (error) {
-    return new Error("No matching account Id found")
+    return new Error("No matching account Id found");
   }
 }
 
-
-module.exports = { 
-  registerAccount, 
-  checkExistingEmail, 
-  getAccountByEmail, 
-  updateAccountInfo, 
+module.exports = {
+  registerAccount,
+  checkExistingEmail,
+  getAccountByEmail,
+  updateAccountInfo,
   updatePassword,
-  getAccountById };
+  getAccountById,
+  checkExistingEmailById,
+};

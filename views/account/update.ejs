@@ -10,15 +10,14 @@
 <div class="form-container border">
   <form method="post" action="/account/update-info" class="form">
     <fieldset>
-        <legend>Update Account Information</legend>
-        <div class="required">All fields are required</div>    
+        <legend>Update Account Information</legend>        
         <label for="account_firstname" class="top"
         >First Name
         <input
             type="text"
             name="account_firstname"
             id="account_firstname"
-            required
+            required            
             value="<%= locals.account_firstname %>"
         />
         </label>
