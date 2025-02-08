@@ -45,7 +45,7 @@ async function checkExistingEmailById(account_email, account_id) {
   try {
     console.log("inside checkExistingEmailById 1")
     const sql =
-      "SELECT * FROM account WHERE account_email = $1 AND account_id != $2 RETURNING *";
+      "SELECT * FROM account WHERE account_email = $1 AND account_id != $2";      
     const email = await pool.query(sql, [account_email, account_id]);
     console.log("inside checkExistingEmailById 2")
     return email.rowCount;
