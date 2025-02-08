@@ -207,50 +207,43 @@ async function buildUpdateAccount (req, res, next) {
 
 async function changeAccountInfo(req, res) {
   let nav = await utilities.getNav();
+  // req.body data comes from submitted form
   const {
     account_firstname,
     account_lastname,
-    account_email    
+    account_email,
+    account_id    
   } = req.body;
 
-  //Hash the password before storing
-  let hashedPassword;
-  try {
-    // regular password and cost (salt is generated automatically)
-    hashedPassword = await bcrypt.hashSync(account_password, 10);
-  } catch {
-    req.flash(
-      "notice",
-      "Sorry, there was an error processing the registration."
-    );
-    res.status(500).render("account/register", {
-      title: "Registration",
-      nav,
-      errors: null,
-    });
-  }
+  // check to see if email already exists - Done in validation check rules
 
-  const reqResult = await accountModel.registerAccount(
+
+  // send to model to run sql update
+  const reqResult = await accountModel.updateAccountInfo(
     account_firstname,
     account_lastname,
     account_email,
-    hashedPassword
+    account_id
   );
 
   if (reqResult) {
     req.flash(
       "notice",
-      `Congratulations, you\'re registered ${account_firstname}, Please log in.`
+      `Congratulations, you\'ve updated your account information ${account_firstname}.`
     );
-    res.status(201).render("account/login", {
-      title: "Login",
+    res.status(201).render("account/accounts", {
+      title: "Account Management",
       nav,
+      errors: null
     });
   } else {
-    req.flash("notice", "Sorry, the registration failed.");
-    res.status(501).render("account/register", {
-      title: "Registration",
+    req.flash("notice", "Sorry, the account information update failed.");
+    // This is returning to account management page upon failure, should this return
+    // sticky values and return to the form?  It does in the validation checks.
+    res.status(501).render("account/accounts", {
+      title: "Account Management",
       nav,
+      errors: null
     });
   }
 }
@@ -261,26 +254,89 @@ async function changeAccountInfo(req, res) {
 
 async function changePassword(req, res) {
   let nav = await utilities.getNav();
-  const account_password  = req.body;
+  const { old_password, new_password, account_id }  = req.body;
 
-  //Hash the password before storing
-  let hashedPassword;
-  try {
-    // regular password and cost (salt is generated automatically)
-    hashedPassword = await bcrypt.hashSync(account_password, 10);
-  } catch {
-    req.flash(
-      "notice",
-      "Sorry, there was an error processing the password update."
-    );
-    res.status(500).render("account/accounts", {
-      title: "Account Management",
+  // Get user's current data
+  const accountData = await accountModel.getAccountById(account_id);
+  
+  if (!accountData) {
+    // this shouldn't even happen, because the account_id is coming from the 
+    // login data, but if it does, I need to know that it broke here.
+    req.flash("notice", "Invalid account id. Were you logged out?.");
+    res.status(400).render("account/update", {
+      title: "Account Update",
       nav,
       errors: null,
     });
+    return;
   }
 
-  const reqResult = await accountModel.updatePassword(hashedPassword);
+  // Compare old password with stored password
+  const isMatch = await bcrypt.compare(old_password, accountData.account_password)
+  if (!isMatch) {
+    req.flash("notice", "Incorrect old password")
+    return res.redirect("/account/update");
+  }
+
+  //if accountData exists, then try to compare passwords, the one entered with
+  //the hash version stored, and run bcrypt
+  //create jwt token and save it in accessToken
+
+  // (I copied this from login process.  Do I need this here, or should user login again?)
+  // try {
+  //   if (await bcrypt.compare(old_password, accountData.account_password)) {
+  //     delete accountData.account_password;
+  //     //sign the user with jwt
+  //     const accessToken = jwt.sign(
+  //       // accountData from getAccountById(),
+  //       {
+  //         account_id: accountData.account_id,
+  //         account_firstname: accountData.account_firstname,
+  //         account_lastname: accountData.account_lastname,
+  //         account_email: accountData.account_email,
+  //         account_type: accountData.account_type, 
+  //       },
+  //       process.env.ACCESS_TOKEN_SECRET,
+  //       { expiresIn: 3600 * 1000 }
+  //     );
+  //     //set res.cookie with accessToken
+  //     if (process.env.NODE_ENV === "development") {
+  //       res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 });
+  //     } // setting httpOnly says that javascript can't be used 
+  //     else {
+  //       res.cookie("jwt", accessToken, {
+  //         httpOnly: true,
+  //         secure: true,
+  //         maxAge: 3600 * 1000,
+  //       });
+  //     }
+  //     return res.redirect("/account");
+  //   }//else statement?
+  // } catch catch (error) {
+  //   throw new Error("Access Forbidden");
+  // }
+
+
+
+  //Hash the password before storing
+  let hashedPassword;
+    try {
+      // regular password and cost (salt is generated automatically)
+      hashedPassword = await bcrypt.hashSync(new_password, 10);
+    } catch {
+      req.flash(
+        "notice",
+        "Sorry, there was an error processing the password update."
+      );
+      res.status(500).render("account/update", {
+        title: "Account Management",
+        nav,
+        errors: null,
+      });
+    }
+
+  // update password
+  const reqResult = await accountModel.updatePassword(hashedPassword, account_id);
 
   if (reqResult) {
     req.flash(
@@ -308,4 +364,14 @@ async function handleLogout(req, res) {
   res.redirect("/")
 }
 
-module.exports = { buildLogin, buildRegister, registerAccount, accountLogin, buildAccountManage, buildUpdateAccount, handleLogout };
+module.exports = { 
+  buildLogin, 
+  buildRegister, 
+  registerAccount, 
+  accountLogin, 
+  buildAccountManage, 
+  buildUpdateAccount, 
+  handleLogout,
+  changeAccountInfo,
+  changePassword
+ };

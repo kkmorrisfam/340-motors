@@ -37,14 +37,25 @@ router.post(
 // process the login attempt
 router.post(
     "/login",
-    // (req, res) => {
-    //     res.status(200).send('login process')
-    // }
-    
-    //need to build loginAccount first
     regValidate.loginRules(),
     regValidate.checkLoginData,
     utilities.handleErrors(accountController.accountLogin)
 )
 
+// add routes post updates to account information and password
+router.post(
+    '/update',
+    utilities.checkJWTToken,
+    regValidate.updateAccountInfoRules(),
+    regValidate.checkAccountUpdateData,
+    utilities.handleErrors(accountController.changeAccountInfo)
+)
+
+router.post(
+    '/update',
+    utilities.checkJWTToken,
+    regValidate.updatePasswordRules(),
+    regValidate.checkPassword,
+    utilities.handleErrors(accountController.changePassword)
+)
 module.exports = router;

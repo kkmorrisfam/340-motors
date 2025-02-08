@@ -66,12 +66,12 @@ async function updateAccountInfo(
 ) {
   try {
     const sql =
-      "INSERT INTO account (account_firstname, account_lastname, account_email, account_password, account_type) VALUES ($1, $2, $3, $4, 'Client') RETURNING *";
+      "UPDATE public.account SET account_firstname = $1, account_lastname = $2, account_email = $3 WHERE account_id = $4 RETURNING *";
     return await pool.query(sql, [
       account_firstname,
       account_lastname,
       account_email,
-      account_password,
+      account_id
     ]);
   } catch (error) {
     return error.message;
@@ -84,24 +84,43 @@ async function updateAccountInfo(
  ***********************/
 
 async function updatePassword(
-  account_firstname,
-  account_lastname,
-  account_email,
-  account_password
+    account_password,
+    account_id
 ) {
   try {
     const sql =
-      "INSERT INTO account (account_firstname, account_lastname, account_email, account_password, account_type) VALUES ($1, $2, $3, $4, 'Client') RETURNING *";
-    return await pool.query(sql, [
-      account_firstname,
-      account_lastname,
-      account_email,
+      "UPDATE public.account SET account_password = $1 WHERE account_id = $2 RETURNING *";
+    return await pool.query(sql, [      
       account_password,
+      account_id
     ]);
   } catch (error) {
     return error.message;
   }
 }
 
+/**************************
+ * Return account data using
+ * account id
+**************************** */
 
-module.exports = { registerAccount, checkExistingEmail, getAccountByEmail };
+async function getAccountById(account_id) {
+  try {
+    const result = await pool.query(
+      'SELECT account_id, account_firstname, account_lastname, account_email, account_type, account_password FROM account WHERE account_id = $1',
+      [account_email])
+      return result.rows[0]
+    
+  } catch (error) {
+    return new Error("No matching account Id found")
+  }
+}
+
+
+module.exports = { 
+  registerAccount, 
+  checkExistingEmail, 
+  getAccountByEmail, 
+  updateAccountInfo, 
+  updatePassword,
+  getAccountById };
