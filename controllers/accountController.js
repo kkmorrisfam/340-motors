@@ -192,7 +192,7 @@ async function buildUpdateAccount (req, res, next) {
   }
 
   res.render("account/update-account", {
-    title: "Update Account Information",
+    title: "Account Update",
     nav,
     errors: null,
     account_firstname: req.user.account_firstname,
@@ -201,4 +201,10 @@ async function buildUpdateAccount (req, res, next) {
   })
 }
 
-module.exports = { buildLogin, buildRegister, registerAccount, accountLogin, buildAccountManage, buildUpdateAccount };
+async function handleLogout(req, res) {
+  res.clearCookie("jwt")
+  req.flash("notice", "You have been logged out")
+  res.redirect("/")
+}
+
+module.exports = { buildLogin, buildRegister, registerAccount, accountLogin, buildAccountManage, buildUpdateAccount, handleLogout };

@@ -24,6 +24,9 @@ router.get("/", utilities.checkLogin, utilities.handleErrors(accountController.b
 //add Udpate Account Route
 router.get("/update/:account_id", utilities.checkJWTToken, utilities.handleErrors(accountController.buildUpdateAccount))
 
+//add logout route
+router.get("/logout", utilities.handleErrors(accountController.handleLogout))
+
 // add route to post registration form
 router.post(
     '/register', 
