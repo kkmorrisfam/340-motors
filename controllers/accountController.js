@@ -350,7 +350,7 @@ async function changePassword(req, res) {
   if (reqResult) {
     req.flash(
       "notice",
-      `Congratulations, you\'ve changed your password ${account_firstname}`
+      `Congratulations, you\'ve changed your password ${accountData.account_firstname}`
     );
     return res.redirect("/account");
     // res.status(201).render("account/accounts", {
