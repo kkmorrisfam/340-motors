@@ -207,10 +207,10 @@ validate.updatePasswordRules = () => {
     body("new_password")
       .trim()
       .notEmpty()
-      .custom((value) => {
-        console.log("Validating password:", value);  // ✅ Log the password
-        return true;
-      })
+    //   .custom((value) => {
+    //     console.log("Validating password:", value); //for testing
+    //     return true;
+    //   })
       .isStrongPassword({
         minLength: 12,
         minLowerCase: 1,

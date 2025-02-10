@@ -113,9 +113,11 @@ async function accountLogin(req, res) {
   //create jwt token and save it in accessToken
   try {
     if (await bcrypt.compare(account_password, accountData.account_password)) {
+      //remove the hashed password from the accountData array
       delete accountData.account_password;
       //sign the user with jwt
       const accessToken = jwt.sign(
+        // could probably get this working again with accountData, but don't have time.
         // accountData,
         {
           account_id: accountData.account_id,
@@ -267,12 +269,18 @@ async function changePassword(req, res) {
   if (!accountData) {
     // this shouldn't even happen, because the account_id is coming from the
     // login data, but if it does, I need to know that it broke here.
-    req.flash("notice", "Invalid account id. Were you logged out?.");
-    res.status(400).render("account/update", {
-      title: "Account Update",
+    // maybe on timeout?
+    req.flash("notice", "Invalid account. Were you logged out?."); 
+    res.render("account/login", {
+      title: "Login",
       nav,
       errors: null,
     });
+    // res.status(400).render("account/update", {
+    //   title: "Account Update",
+    //   nav,
+    //   errors: null,
+    // });
     return;
   }
 
@@ -281,13 +289,65 @@ async function changePassword(req, res) {
     old_password,
     accountData.account_password
   );
+  // if it's not a match, go back to account page
   if (!isMatch) {
     req.flash("notice", "Incorrect old password");
-    return res.redirect("/account/update-info");
+    //send back to update page for the user
+    return res.redirect(`/account/update/${account_id}`);
+    // res.status(500).render("account/update", {
+    //   title: "Account Management",
+    //   nav,
+    //   errors: null,
+    // });
+    // return;
   }
 
-  //if accountData exists, then try to compare passwords, the one entered with
-  //the hash version stored, and run bcrypt
+  //Hash the password before storing
+  let hashedPassword;
+  try {
+    // regular password and cost (salt is generated automatically)
+    hashedPassword = await bcrypt.hashSync(new_password, 10);
+    //delete hashed password from the accountData array
+    delete accountData.account_password;
+      //sign the user with jwt
+    const accessToken = jwt.sign(
+        // accountData from getAccountById(),
+        {
+          account_id: accountData.account_id,
+          account_firstname: accountData.account_firstname,
+          account_lastname: accountData.account_lastname,
+          account_email: accountData.account_email,
+          account_type: accountData.account_type,
+        },
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: 3600 * 1000 }
+      );
+      //set res.cookie with accessToken
+      if (process.env.NODE_ENV === "development") {
+        res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 });
+      } // setting httpOnly says that javascript can't be used
+      else {
+        res.cookie("jwt", accessToken, {
+          httpOnly: true,
+          secure: true,
+          maxAge: 3600 * 1000,
+        });
+      }
+
+  } catch {
+    req.flash(
+      "notice",
+      "Sorry, there was an error processing the password update."
+    );
+    res.status(500).render("account/update", {
+      title: "Account Management",
+      nav,
+      errors: null,
+    });
+    
+  }
+
+  
   //create jwt token and save it in accessToken
 
   // (I copied this from login process.  Do I need this here, or should user login again?)
@@ -324,23 +384,7 @@ async function changePassword(req, res) {
   //   throw new Error("Access Forbidden");
   // }
 
-  //Hash the password before storing
-  let hashedPassword;
-  try {
-    // regular password and cost (salt is generated automatically)
-    hashedPassword = await bcrypt.hashSync(new_password, 10);
-  } catch {
-    req.flash(
-      "notice",
-      "Sorry, there was an error processing the password update."
-    );
-    res.status(500).render("account/update", {
-      title: "Account Management",
-      nav,
-      errors: null,
-    });
-  }
-
+  
   // update password
   const reqResult = await accountModel.updatePassword(
     hashedPassword,
