@@ -232,17 +232,42 @@ async function changeAccountInfo(req, res) {
   );
 
   if (reqResult) {
+    // Get updated data from the database. If I use the submitted data, could still cause weird errors every once
+    // in a while.
+    const updatedAccountData = await accountModel.getAccountById(account_id);
+
+    //udpate jwt and cookie so that changed name is available elsewhere
+    const accessToken = jwt.sign(
+      // accountData from getAccountById(),
+      {
+        account_id: updatedAccountData.account_id,
+        account_firstname: updatedAccountData.account_firstname,
+        account_lastname: updatedAccountData.account_lastname,
+        account_email: updatedAccountData.account_email,
+        account_type: updatedAccountData.account_type,
+      },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: 3600 * 1000 }
+    );
+    
+    //set res.cookie with accessToken
+    if (process.env.NODE_ENV === "development") {
+      res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 });
+    } // setting httpOnly says that javascript can't be used
+    else {
+      res.cookie("jwt", accessToken, {
+        httpOnly: true,
+        secure: true,
+        maxAge: 3600 * 1000,
+      });
+    }
+
     req.flash(
       "notice",
       `Congratulations, you\'ve updated your account information ${account_firstname}.`
     );
     // use redirect instead of render to have it go through the route to recreate the page, not just directly back to accounts.ejs
     return res.redirect("/account");
-    // res.status(201).render("account/accounts", {
-    //   title: "Account Management",
-    //   nav,
-    //   errors: null
-    // });
   } else {
     req.flash("notice", "Sorry, the account information update failed.");
     // This is returning to account management page upon failure, should this return
@@ -339,11 +364,12 @@ async function changePassword(req, res) {
       "notice",
       "Sorry, there was an error processing the password update."
     );
-    res.status(500).render("account/update", {
-      title: "Account Management",
-      nav,
-      errors: null,
-    });
+    return res.redirect(`/account/update/${account_id}`);
+    // res.status(500).render("account/update", {
+    //   title: "Account Management",
+    //   nav,
+    //   errors: null,
+    // });
     
   }
 
@@ -402,7 +428,8 @@ async function changePassword(req, res) {
     //   nav,
     // });
   } else {
-    req.flash("notice", "Sorry, the registration failed.");
+    req.flash("notice", "Sorry, the password update failed.");
+    //return to account management page
     res.status(501).render("account/accounts", {
       title: "Account Management",
       nav,
