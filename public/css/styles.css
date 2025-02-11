@@ -17,6 +17,9 @@
     --clr-medium2: #88D498;
     --clr-dark1: #353831;
     --clr-dark2: #1d2d2a;
+    --clr-button1: var(--clr-medium1);
+    --clr-button2: #f68924;
+    --clr-button3: #fabf88;
 
     --font-heading: "Noto Serif", serif;
     --font-paragraph: "Roboto", serif;
@@ -50,16 +53,26 @@
  }
  
  button {
-  background: var(--clr-medium1);
+  background: var(--clr-button1);
   padding: 1rem;
   font-weight: 700;
-  font-size: larger;
-  border-radius: .5rem;
+  font-size: larger;  
   padding: .3rem .7rem;
   margin: 0 0 1rem 2%;
   width: 96%;
   max-width: 20rem;
+  border-radius: .5rem;
+  box-shadow: 0 5px #888;
 }
+
+button:hover {background-color: var(--clr-button2)}
+
+button:active {
+  background-color: var(--clr-button3);
+  box-shadow: 0 3px #666;
+  transform: translateY(4px);
+}
+
 
  
 /* Layout */
@@ -408,7 +421,7 @@ input:required:valid {
 
 .submitBtn {
     border: none;
-    background-color: var(--clr-medium1);
+    background-color: var(--clr-button1);
     color: var(--clr-dark2);
     font-weight: 600;
     font-size: larger;
@@ -417,7 +430,16 @@ input:required:valid {
     margin: 0 0 2rem 2%;
     width: 96%;
     max-width: 20rem;
+    box-shadow: 0 5px #888;
 }
+.submitBtn:hover {background-color: var(--clr-button2)}
+
+.submitBtn:active {
+  background-color: var(--clr-button3);
+  box-shadow: 0 3px #666;
+  transform: translateY(4px);
+}
+
 
 
 /* -----Management Views--- */
