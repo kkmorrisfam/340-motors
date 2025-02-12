@@ -30,7 +30,7 @@ invCont.buildByClassificationId = async function (req, res, next) {
 };
 
 /* *************************
- *  Build inventory by specific inventory view
+ *  Build Inventory by specific inventory view
  *  *************************/
 invCont.buildByInv_id = async function (req, res, next) {
   console.log(
@@ -39,7 +39,7 @@ invCont.buildByInv_id = async function (req, res, next) {
   const inv_id = req.params.inv_id;
   const data = await invModel.getInventoryByInv_id(inv_id);
   // console.log("data in buildByInv_id: ", data);
-  //call the model to get the data
+  //call the model to get the data for reviews
   const reviewData = await reviewModel.getReviewByInv_id(inv_id);
   console.log("reviewData", reviewData )
   const vehicleView = await utilities.buildVehicleView(data);

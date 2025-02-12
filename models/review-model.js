@@ -48,16 +48,30 @@ async function getReviewByAccount_id(account_id) {
 }
 
 /********************************
- *  Get all reviews by inv_id and account info
- * Do I need another sql statement?
+ * add review 
+ * 
  ********************************/
+async function addReview() {
+    console.log("inside review-model addReview")
 
+}
 
 
 
 /********************************
- * 
+ * update review
  ********************************/
+async function updateReview() {
+    console.log("inside review-model updateReview")
+}
 
 
-module.exports = { getReviewByInv_id, getReviewByAccount_id }
+/********************************
+ * delete review
+ ********************************/
+async function deleteReview() {
+    console.log("inside review-model deleteReview")
+}
+
+
+module.exports = { getReviewByInv_id, getReviewByAccount_id, addReview, updateReview, deleteReview }
