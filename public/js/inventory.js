@@ -1,7 +1,7 @@
 'use strict'
 
 //Get a list of items in inventory based on the classification_id 
-let classificationList = document.querySelector("#classification_id") //was #classifictionList in example: set in utilities/index.js
+let classificationList = document.querySelector("#classification_id") //was #classificationList in example: set in utilities/index.js
 
 classificationList.addEventListener("change", function () {
     let classification_id = classificationList.value

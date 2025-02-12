@@ -373,44 +373,6 @@ async function changePassword(req, res) {
     
   }
 
-  
-  //create jwt token and save it in accessToken
-
-  // (I copied this from login process.  Do I need this here, or should user login again?)
-  // try {
-  //   if (await bcrypt.compare(old_password, accountData.account_password)) {
-  //     delete accountData.account_password;
-  //     //sign the user with jwt
-  //     const accessToken = jwt.sign(
-  //       // accountData from getAccountById(),
-  //       {
-  //         account_id: accountData.account_id,
-  //         account_firstname: accountData.account_firstname,
-  //         account_lastname: accountData.account_lastname,
-  //         account_email: accountData.account_email,
-  //         account_type: accountData.account_type,
-  //       },
-  //       process.env.ACCESS_TOKEN_SECRET,
-  //       { expiresIn: 3600 * 1000 }
-  //     );
-  //     //set res.cookie with accessToken
-  //     if (process.env.NODE_ENV === "development") {
-  //       res.cookie("jwt", accessToken, { httpOnly: true, maxAge: 3600 * 1000 });
-  //     } // setting httpOnly says that javascript can't be used
-  //     else {
-  //       res.cookie("jwt", accessToken, {
-  //         httpOnly: true,
-  //         secure: true,
-  //         maxAge: 3600 * 1000,
-  //       });
-  //     }
-  //     return res.redirect("/account");
-  //   }//else statement?
-  // } catch catch (error) {
-  //   throw new Error("Access Forbidden");
-  // }
-
-  
   // update password
   const reqResult = await accountModel.updatePassword(
     hashedPassword,

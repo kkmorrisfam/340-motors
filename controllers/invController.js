@@ -1,7 +1,8 @@
 const invModel = require("../models/inventory-model");
 const utilities = require("../utilities/");
-
+const reviewModel = require("../models/review-model")
 const invCont = {};
+
 
 /* *************************
  *  Build inventory by classification view
@@ -38,7 +39,15 @@ invCont.buildByInv_id = async function (req, res, next) {
   const inv_id = req.params.inv_id;
   const data = await invModel.getInventoryByInv_id(inv_id);
   // console.log("data in buildByInv_id: ", data);
+  //call the model to get the data
+  const reviewData = await reviewModel.getReviewByInv_id(inv_id);
+  console.log("reviewData", reviewData )
   const vehicleView = await utilities.buildVehicleView(data);
+  // const reviewList = await utilities.buildReviewListByInv_id(data);
+  
+// need to build reviewView where I add the title with the list and the link to login or the form to add info
+// build list in that build view
+
   let nav = await utilities.getNav();
   const vehicleName =
     data[0].inv_year + " " + data[0].inv_make + " " + data[0].inv_model;
@@ -384,5 +393,6 @@ invCont.findServerError = async function (req, res, next) {
     next(error);
   }
 };
+
 
 module.exports = invCont;
