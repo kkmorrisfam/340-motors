@@ -18,6 +18,7 @@ const pool = require('./database/')
 // const accountRoute = require("./routes/accountRoute")
 const bodyParser = require("body-parser")
 const cookieParser = require("cookie-parser")
+const reviewRoute = require("./routes/reviewRoute")
 
 
 /* ***********************
@@ -81,7 +82,8 @@ app.use("/inv", inventoryRoute)
 app.use("/account", require("./routes/accountRoute")) //can also write it like this
 // app.use("/account", accountRoute)
 
-
+// Review route for customer reviews
+app.use("/reviews", reviewRoute)
 
 // File Not Found Route - must be last route in list
 app.use(async (req, res, next) => {

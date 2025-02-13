@@ -3,6 +3,8 @@ const Util = {};
 const {body, validationResult} = require("express-validator")
 const jwt = require("jsonwebtoken")
 require("dotenv").config()
+const ejs = require("ejs");
+
 
 /* ************************
  * Constructs the nav HTML unordered list
@@ -210,7 +212,7 @@ Util.buildReviewListByInv_id = async function (data) {
    let reviewList = "";
   if (data.length>0) {
     reviewList += '<ul class="reviews-list">';
-    data.row.forEach((row) => {
+    data.rows.forEach((row) => {
       //get First Initial + Last Name from data
       let initial = row.account_firstname.charAt(0).toUpperCase();
       let displayName = initial + row.account_lastName;
@@ -234,6 +236,16 @@ Util.buildReviewListByInv_id = async function (data) {
     });    
   }
 }
+
+/***********************************
+ * render an ejs partial into a string
+ ***********************************/
+
+Util.renderPartial = async function (partialPath, data) {
+  console.log("inside renderPartial in utilities/index: data")
+  const filePath = path.join(__dirname, "../views", `${partialPath}.ejs`);
+  return await ejs.renderFile(filePath, data);
+};
 
 
 /* ************************

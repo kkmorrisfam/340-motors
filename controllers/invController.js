@@ -1,6 +1,17 @@
+/**Add condition to display "No reviews yet" or something if there are no reviews for inv view 
+ * getReviewByInv_id function not working? 
+ * reviewData is empty array
+ * need to add test data to reviews.
+ * if no reviews, should still display
+ * when going to the add-form, if no review data, should still be sending data for the account and inv_id
+ * change to send account_id directly and not reviewData?
+ *
+*/
+
 const invModel = require("../models/inventory-model");
 const utilities = require("../utilities/");
-const reviewModel = require("../models/review-model")
+const reviewModel = require("../models/review-model");
+const ejs = require("ejs")
 const invCont = {};
 
 
@@ -31,8 +42,10 @@ invCont.buildByClassificationId = async function (req, res, next) {
 
 /* *************************
  *  Build Inventory by specific inventory view
+ *  And Reviews
  *  *************************/
 invCont.buildByInv_id = async function (req, res, next) {
+  let nav = await utilities.getNav();
   console.log(
     "inside controllers/invController.js file invCont.buildByInv_id function"
   );
@@ -41,20 +54,37 @@ invCont.buildByInv_id = async function (req, res, next) {
   // console.log("data in buildByInv_id: ", data);
   //call the model to get the data for reviews
   const reviewData = await reviewModel.getReviewByInv_id(inv_id);
-  console.log("reviewData", reviewData )
+  console.log("reviewData", reviewData);
   const vehicleView = await utilities.buildVehicleView(data);
-  // const reviewList = await utilities.buildReviewListByInv_id(data);
-  
-// need to build reviewView where I add the title with the list and the link to login or the form to add info
-// build list in that build view
+  const reviewList = await utilities.buildReviewListByInv_id(reviewData);
 
-  let nav = await utilities.getNav();
+  // need to build reviewView where I add the title with the list and the link to login or the form to add info
+  // build list in that build view
+  let addReview = "";
+  // check login, if logged in add a form to add a review
+  if (res.locals.loggedin) {
+    console.log("res.locals.loggedin is true");
+    const reviewFormData = {
+      reviewData,
+      inv_id,
+    };
+    addReview = await ejs.renderFile("./views/reviews/add-form.ejs", reviewFormData);
+
+    //addReview = ejs.renderFile('.review/add-form', data)
+  } else {
+    console.log("res.locals.loggedin is false");
+    addReview =
+      '<p>You must first <a href="/account/login">login</a> to write a review.</p>';
+  }
+
   const vehicleName =
     data[0].inv_year + " " + data[0].inv_make + " " + data[0].inv_model;
   res.render("./inventory/vehicle", {
     title: vehicleName,
     nav,
     vehicleView,
+    reviewList,
+    addReview
   });
 };
 
@@ -219,19 +249,21 @@ invCont.getInventoryJSON = async (req, res, next) => {
 invCont.buildModifyVehicleView = async function (req, res, next) {
   console.log("inside invCont.buildModifyVehicleView");
   const inv_id = parseInt(req.params.inv_id);
-  console.log("inv_id in buildModifyVehicleView: " + inv_id)
+  console.log("inv_id in buildModifyVehicleView: " + inv_id);
   let nav = await utilities.getNav();
   const invDataArray = await invModel.getInventoryByInv_id(inv_id);
-  
-  const invData = invDataArray[0]
-  console.log("invData: ", invData)
-  const classificationList = await utilities.buildClassificationList(invData.classification_id);
+
+  const invData = invDataArray[0];
+  console.log("invData: ", invData);
+  const classificationList = await utilities.buildClassificationList(
+    invData.classification_id
+  );
   const invName = `${invData.inv_make} ${invData.inv_model}`;
   res.render("./inventory/edit-vehicle", {
     title: "Edit " + invName,
-    nav,    
+    nav,
     classificationList: classificationList,
-    errors: null,    
+    errors: null,
     inv_id: invData.inv_id,
     inv_make: invData.inv_make,
     inv_model: invData.inv_model,
@@ -242,9 +274,9 @@ invCont.buildModifyVehicleView = async function (req, res, next) {
     inv_description: invData.inv_description,
     inv_image: invData.inv_image,
     inv_thumbnail: invData.inv_thumbnail,
-    classification_id: invData.classification_id
-  })
-}
+    classification_id: invData.classification_id,
+  });
+};
 
 /* ******************************
  * Update Vehicle data
@@ -280,7 +312,7 @@ invCont.processUpdateVehicle = async function (req, res, next) {
     inv_thumbnail,
     inv_id
   );
-  console.log("updateResult in invCont.processUpdateVehicle: ", updateResult)
+  console.log("updateResult in invCont.processUpdateVehicle: ", updateResult);
   if (updateResult) {
     const itemName = updateResult.inv_make + " " + updateResult.inv_model;
     nav = await utilities.getNav();
@@ -308,53 +340,49 @@ invCont.processUpdateVehicle = async function (req, res, next) {
       inv_image,
       inv_thumbnail,
       inv_id,
-    })
+    });
   }
-}
+};
 
 /* ***************************
  * Deliver Delete Vehicle View
- * 
+ *
  ****************************/
 
 invCont.buildDeleteVehicleView = async function (req, res, next) {
   console.log("inside invCont.buildDeleteVehicleView");
-  const inv_id = parseInt(req.params.inv_id);  
-  console.log("inv_id in buildDeleteVehicleView: " + inv_id)
+  const inv_id = parseInt(req.params.inv_id);
+  console.log("inv_id in buildDeleteVehicleView: " + inv_id);
   let nav = await utilities.getNav();
-  const invDataArray = await invModel.getInventoryByInv_id(inv_id);  
-  const invData = invDataArray[0]
-  console.log("invData: ", invData)
+  const invDataArray = await invModel.getInventoryByInv_id(inv_id);
+  const invData = invDataArray[0];
+  console.log("invData: ", invData);
   // const classificationList = await utilities.buildClassificationList(invData.classification_id);
   const invName = `${invData.inv_make} ${invData.inv_model}`;
   res.render("./inventory/delete-confirm", {
     title: "Delete " + invName,
-    nav, 
-    errors: null,    
+    nav,
+    errors: null,
     inv_id: invData.inv_id,
     inv_make: invData.inv_make,
     inv_model: invData.inv_model,
-    inv_year: invData.inv_year,    
+    inv_year: invData.inv_year,
     inv_price: invData.inv_price,
-  })
-}
-
+  });
+};
 
 /* ******************************
  * Delete Vehicle data
  * aka invCont.deleteVehicle
  *******************************/
 invCont.processDeleteVehicle = async function (req, res, next) {
-// Log request body
-// console.log("req.body:", req.body);
-  const {    
-    inv_make,
-    inv_model,    
-  } = req.body;  
-  
+  // Log request body
+  // console.log("req.body:", req.body);
+  const { inv_make, inv_model } = req.body;
+
   console.log("inside invCont.processDeleteVehicle function");
   let nav = await utilities.getNav();
-  const inv_id = parseInt(req.body.inv_id);  
+  const inv_id = parseInt(req.body.inv_id);
   // console.log("inv_id: ", inv_id)
   const deleteThisOne = await invModel.deleteVehicle(inv_id);
   // console.log("deleteThisOne in invCont.processDeleteVehicle: ", deleteThisOne)
@@ -364,21 +392,20 @@ invCont.processDeleteVehicle = async function (req, res, next) {
     nav = await utilities.getNav();
     req.flash("notice", `The ${itemName} was successfully deleted.`);
     res.redirect("/inv/management");
-  } else {    
-    
+  } else {
     req.flash("notice", `Sorry, the delete failed.`);
     res.status(501).render("inventory/delete-vehicle", {
       title: "Delete " + itemName,
-      nav,      
+      nav,
       errors: null,
       inv_make,
       inv_model,
       inv_year,
       inv_price,
       inv_id,
-    })
+    });
   }
-}
+};
 
 /* ***************************
  * Server Error for Week 3 View
@@ -393,6 +420,5 @@ invCont.findServerError = async function (req, res, next) {
     next(error);
   }
 };
-
 
 module.exports = invCont;
