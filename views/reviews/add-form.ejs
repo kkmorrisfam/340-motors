@@ -4,7 +4,7 @@
     <label for="screen_name" class="top"
       >Screen Name
       <input type="text" name="screen_name" id="screen_name"       
-      value="<%= reviewData.length > 0 ? reviewData[0].account_firstname.charAt(0).toUpperCase() + reviewData[0].account_lastname : '' %>"/>
+      value="<%= screenName %>"/>
     </label>
     <label for="review_text" class="top"
       >Review
@@ -19,7 +19,7 @@
         maxlength="65"
       ></textarea
       ></label>
-    <input type="hidden" name="account_id" value="<%= reviewData[0].account_id %>" />  
+    <input type="hidden" name="account_id" value="<%= account_id %>" />  
     <input type="hidden" name="inv_id" value="<%= inv_id %>" />
     <input type="submit" value="Submit Review" class="submitBtn" />
   </form>

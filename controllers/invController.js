@@ -1,19 +1,18 @@
-/**Add condition to display "No reviews yet" or something if there are no reviews for inv view 
- * getReviewByInv_id function not working? 
+/**Add condition to display "No reviews yet" or something if there are no reviews for inv view
+ * getReviewByInv_id function not working?
  * reviewData is empty array
  * need to add test data to reviews.
  * if no reviews, should still display
  * when going to the add-form, if no review data, should still be sending data for the account and inv_id
  * change to send account_id directly and not reviewData?
  *
-*/
+ */
 
 const invModel = require("../models/inventory-model");
 const utilities = require("../utilities/");
 const reviewModel = require("../models/review-model");
-const ejs = require("ejs")
+const ejs = require("ejs");
 const invCont = {};
-
 
 /* *************************
  *  Build inventory by classification view
@@ -57,28 +56,35 @@ invCont.buildByInv_id = async function (req, res, next) {
   //call the model to get the data for reviews
   const reviewData = await reviewModel.getReviewByInv_id(inv_id);
   console.log("reviewData", reviewData);
-  
+
   // create review list if there are reviews
-  const reviewList = ""
+  let reviewList = "";
   if (reviewData.length > 0) {
     reviewList = await utilities.buildReviewListByInv_id(reviewData);
   } else {
-    reviewList = "Be the first to leave a review."
+    reviewList = "Be the first to leave a review.";
   }
-  const account_firstname = req.user.account_firstname;
-  const account_lastname = req.user.account_lastname;
-  console.log("account_firstname invController: ", account_firstname)
 
-  
   let addReview = "";
   // check login, if logged in add a form to add a review
   if (res.locals.loggedin) {
+    const account_firstname = req.user.account_firstname;
+    const account_lastname = req.user.account_lastname;
+    console.log("account_firstname invController: ", account_firstname);
+    const screenName =
+      account_firstname.charAt(0).toUpperCase() + account_lastname;
+    const account_id = req.user.account_id;
+
     console.log("res.locals.loggedin is true");
-    const reviewFormData = {      
-      reviewData,
-      inv_id      
+    const reviewFormData = {
+      screenName,
+      account_id,
+      inv_id,
     };
-    addReview = await ejs.renderFile("./views/reviews/add-form.ejs", reviewFormData);
+    addReview = await ejs.renderFile(
+      "./views/reviews/add-form.ejs",
+      reviewFormData
+    );
 
     //addReview = ejs.renderFile('.review/add-form', data)
   } else {
@@ -96,7 +102,7 @@ invCont.buildByInv_id = async function (req, res, next) {
     reviewTitle: "Customer Reviews",
 
     reviewList,
-    addReview
+    addReview,
   });
 };
 
