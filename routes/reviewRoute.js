@@ -3,6 +3,7 @@ const express = require("express")
 const router = new express.Router()
 const reviewCont = require("../controllers/reviewController")
 const utilities = require("../utilities/")
+const reviewValidate = require("../utilities/review-validation")
 
 console.log("inside reviewRoute 2")
 //need to add review form validation
@@ -14,9 +15,9 @@ console.log("inside reviewRoute 2")
 router.post(
     //the path being watched
     '/add-review',
-    //add validation here
-    utilities.handleErrors(reviewCont.processAddReview)
-);
+    reviewValidate.addReviewRules(),
+    reviewValidate.checkAddReviewData,    
+    utilities.handleErrors(reviewCont.processAddReview));
 
 //Route to get review data by account_id for update or delete
 // router.get('/',)

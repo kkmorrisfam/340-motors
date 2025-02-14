@@ -9,7 +9,7 @@ const reviewCont = {}
  * -then load this second.  Needs AJAX
  ***********************************/
 reviewCont.buildReviewByInv_id = async function (req, res, next) {  
-    let nav = await utilities.getNav();
+    // let nav = await utilities.getNav();
     console.log(
     "inside controllers/reviewController.js file reviewCont.buildReviewByInv_id function"
   );
@@ -54,13 +54,14 @@ reviewCont.buildReviewByInv_id = async function (req, res, next) {
 /***********************************
  * add new review
  ***********************************/
-reviewCont.processAddReview = async function(req,res) {
+reviewCont.processAddReview = async function(req, res) {
     console.log("inside reviewController processAddReview")
     const {inv_id, account_id, review_text} = req.body
     console.log("req.body inv_id: ", inv_id)
     console.log("req.body account_id: ", account_id)
     console.log("req.body review_text: ", review_text)
 
+    res.redirect(`/inv/detail/${inv_id}`);
 }
 
 /***********************************

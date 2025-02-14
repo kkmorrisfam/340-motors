@@ -49,21 +49,23 @@ invCont.buildByInv_id = async function (req, res, next) {
     "inside controllers/invController.js file invCont.buildByInv_id function"
   );
   const inv_id = req.params.inv_id;
-  const data = await invModel.getInventoryByInv_id(inv_id);
-  // console.log("data in buildByInv_id: ", data);
+  
+  //get the data to build the Vehicle view, build Vehicle view
+  const data = await invModel.getInventoryByInv_id(inv_id);  
   const vehicleView = await utilities.buildVehicleView(data);
 
   //call the model to get the data for reviews
   const reviewData = await reviewModel.getReviewByInv_id(inv_id);
-  console.log("reviewData", reviewData);
+  // console.log("reviewData", reviewData);
 
-  // create review list if there are reviews
-  let reviewList = "";
-  if (reviewData.length > 0) {
-    reviewList = await utilities.buildReviewListByInv_id(reviewData);
-  } else {
-    reviewList = '<p class="no-reviews">Be the first to leave a review.</p>';
-  }
+  // create review list if there are reviews  
+  const reviewList = await utilities.createReviewList(reviewData);
+
+  // if (reviewData.length > 0) {
+  //   reviewList = await utilities.buildReviewListByInv_id(reviewData);
+  // } else {
+  //   reviewList = '<p class="no-reviews">Be the first to leave a review.</p>';
+  // }
 
   let addReview = "";
   // check login, if logged in add a form to add a review
@@ -71,19 +73,21 @@ invCont.buildByInv_id = async function (req, res, next) {
     const account_firstname = req.user.account_firstname;
     const account_lastname = req.user.account_lastname;
     console.log("account_firstname invController: ", account_firstname);
-    const screenName =
+    const screen_name =
       account_firstname.charAt(0).toUpperCase() + account_lastname;
     const account_id = req.user.account_id;
 
     console.log("res.locals.loggedin is true");
     const reviewFormData = {
-      screenName,
+      screen_name,
       account_id,
       inv_id,
+      errors: null,
     };
     addReview = await ejs.renderFile(
       "./views/reviews/add-form.ejs",
-      reviewFormData
+      reviewFormData,
+    
     );
 
     //addReview = ejs.renderFile('.review/add-form', data)
@@ -102,6 +106,8 @@ invCont.buildByInv_id = async function (req, res, next) {
     reviewTitle: "Customer Reviews",
     reviewList,
     addReview,
+    errors: null,  
+    
   });
 };
 

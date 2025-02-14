@@ -1,0 +1,109 @@
+//add review form validation
+const utilities = require(".");
+const { body, validationResult } = require("express-validator");
+const validate = {};
+const invModel = require("../models/inventory-model");
+const reviewModel = require("../models/review-model");
+const ejs = require("ejs");
+
+/********************************
+ * Validation rules for add review form
+ ********************************/
+
+validate.addReviewRules = () => {
+  console.log(
+    "inside router.post for validation within validate.addReviewRules function review-validation.js"
+  );
+
+  const validationRules = [
+    body("review_text")
+      .trim() // needs to be before .notEmpty()
+      .notEmpty().withMessage("Please enter a review description.").bail()
+      .escape()
+      .isLength({ min: 2 })
+      .withMessage("Please provide a complete description."), //on error this message is sent    
+  ];
+
+  return validationRules;
+};
+
+/********************************
+ * Check data and return errors
+ *  for add review form
+ ********************************/
+
+validate.checkAddReviewData = async (req, res, next) => {
+  const {
+    screen_name,
+    review_text,
+    account_id,
+    inv_id,
+  } = req.body;
+  console.log(
+    "inside validate.checkAddReviewData in utilities/review-validation file"
+  );
+  
+  //If there are errors (errors not empty), return to form with sticky data
+  let errors = [];
+  errors = validationResult(req);
+  console.log("errors in review-validation:", errors)
+  if (!errors.isEmpty()) {
+    let nav = await utilities.getNav();    
+    const vehicleData = await invModel.getInventoryByInv_id(inv_id);
+    const vehicleView = await utilities.buildVehicleView(vehicleData);
+    const reviewData = await reviewModel.getReviewByInv_id(inv_id);
+    const reviewList = await utilities.createReviewList(reviewData);
+    const vehicleName = vehicleData[0].inv_year + " " + vehicleData[0].inv_make + " " + vehicleData[0].inv_model;
+
+    //add review form
+      let addReview = "";
+      // check login, if logged in add a form to add a review
+      if (res.locals.loggedin) {
+        const account_firstname = req.user.account_firstname;
+        const account_lastname = req.user.account_lastname;
+        console.log("account_firstname invController: ", account_firstname);
+        const screen_name =
+          account_firstname.charAt(0).toUpperCase() + account_lastname;
+        const account_id = req.user.account_id;
+    
+        console.log("res.locals.loggedin is true");
+        const reviewFormData = {
+          screen_name,
+          account_id,
+          inv_id,
+          errors,
+          review_text
+        };
+        addReview = await ejs.renderFile(
+          "./views/reviews/add-form.ejs",
+          reviewFormData,
+        
+        );
+    
+        //addReview = ejs.renderFile('.review/add-form', data)
+      } else {
+        console.log("res.locals.loggedin is false");
+        addReview =
+          '<p class="review-message">You must first <a href="/account/login">login</a> to write a review.</p>';
+      }
+    
+
+    res.status(400).render("inventory/vehicle", {
+      errors,
+      title: vehicleName,
+      nav,
+      vehicleView,
+      reviewList,
+      reviewTitle: "Customer Reviews",
+      inv_id,
+      screen_name,
+      review_text,
+      account_id,
+      addReview    
+    });    
+    return;
+  }
+  next();
+};
+
+module.exports = validate;

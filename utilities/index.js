@@ -170,7 +170,7 @@ Util.checkJWTToken = (req, res, next) => {
         res.locals.loggedin = 1
         res.locals.authUser = accountData
         req.user = accountData   //Store user data in req.user for easy access
-        console.log("req.user: ", req.user)
+        console.log("req.user in checkJWTToken: ", req.user)
         next()
       })
   } else {
@@ -247,6 +247,21 @@ Util.renderPartial = async function (partialPath, data) {
   return await ejs.renderFile(filePath, data);
 };
 
+/*************************************
+ * Check for reviews return string
+ *************************************/
+
+Util.createReviewList = async function (reviewData) {
+  
+  let reviewList = ""
+  if (reviewData.length > 0) {
+    reviewList = await Util.buildReviewListByInv_id(reviewData);
+  } else {
+    reviewList = '<p class="no-reviews">Be the first to leave a review.</p>';
+  }
+  console.log("inside createReviewList: ", reviewList)
+  return reviewList;
+}
 
 /* ************************
  * Middleware For Handling Errors
