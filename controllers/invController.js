@@ -52,21 +52,31 @@ invCont.buildByInv_id = async function (req, res, next) {
   const inv_id = req.params.inv_id;
   const data = await invModel.getInventoryByInv_id(inv_id);
   // console.log("data in buildByInv_id: ", data);
+  const vehicleView = await utilities.buildVehicleView(data);
+
   //call the model to get the data for reviews
   const reviewData = await reviewModel.getReviewByInv_id(inv_id);
   console.log("reviewData", reviewData);
-  const vehicleView = await utilities.buildVehicleView(data);
-  const reviewList = await utilities.buildReviewListByInv_id(reviewData);
+  
+  // create review list if there are reviews
+  const reviewList = ""
+  if (reviewData.length > 0) {
+    reviewList = await utilities.buildReviewListByInv_id(reviewData);
+  } else {
+    reviewList = "Be the first to leave a review."
+  }
+  const account_firstname = req.user.account_firstname;
+  const account_lastname = req.user.account_lastname;
+  console.log("account_firstname invController: ", account_firstname)
 
-  // need to build reviewView where I add the title with the list and the link to login or the form to add info
-  // build list in that build view
+  
   let addReview = "";
   // check login, if logged in add a form to add a review
   if (res.locals.loggedin) {
     console.log("res.locals.loggedin is true");
-    const reviewFormData = {
+    const reviewFormData = {      
       reviewData,
-      inv_id,
+      inv_id      
     };
     addReview = await ejs.renderFile("./views/reviews/add-form.ejs", reviewFormData);
 
@@ -83,6 +93,8 @@ invCont.buildByInv_id = async function (req, res, next) {
     title: vehicleName,
     nav,
     vehicleView,
+    reviewTitle: "Customer Reviews",
+
     reviewList,
     addReview
   });

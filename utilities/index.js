@@ -210,7 +210,7 @@ Util.checkLogin = (req, res, next) => {
 
 Util.buildReviewListByInv_id = async function (data) {
    let reviewList = "";
-  if (data.length>0) {
+  if (data.length > 0) {
     reviewList += '<ul class="reviews-list">';
     data.rows.forEach((row) => {
       //get First Initial + Last Name from data
@@ -234,7 +234,7 @@ Util.buildReviewListByInv_id = async function (data) {
       reviewList += row.review_text
       reviewList += '</p></li></ul>'
     });    
-  }
+  } return reviewList;
 }
 
 /***********************************
