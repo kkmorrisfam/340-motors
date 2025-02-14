@@ -51,9 +51,15 @@ async function getReviewByAccount_id(account_id) {
  * add review 
  * 
  ********************************/
-async function addReview() {
+async function addReview(review_text, inv_id, account_id) {
     console.log("inside review-model addReview")
-
+    try {
+        const sql = 
+            "INSERT INTO review (review_text, inv_id, account_id) VALUES ($1, $2, $3) RETURNING *";
+            return await pool.query(sql, [review_text, inv_id, account_id]);
+    } catch(error) {
+        return error.message;
+    }
 }
 
 
@@ -63,6 +69,7 @@ async function addReview() {
  ********************************/
 async function updateReview() {
     console.log("inside review-model updateReview")
+    
 }
 
 
