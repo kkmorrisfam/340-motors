@@ -458,15 +458,34 @@ input:required:valid {
     font-style: italic;
 }
 
+
+/* Reviews section */
+.reviews-title {
+    padding: 1rem;
+    font-weight: 700;
+}
+
+.reviews-div {
+    margin-left: 1.5rem;
+    padding-bottom: 1rem;
+}
+
+.reviews-list-div {
+    padding: .5rem;
+}
+
+.no-reviews {
+    font-weight: 500;
+    font-style: italic;
+}
+
 /* Footer */
 
 footer {
     padding-top: 1rem;
 }
 
-/* .copyright { */
 
-/* } */
 
 /* media query */
 

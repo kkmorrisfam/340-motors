@@ -211,7 +211,7 @@ Util.checkLogin = (req, res, next) => {
 Util.buildReviewListByInv_id = async function (data) {
    let reviewList = "";
   if (data.length > 0) {
-    reviewList += '<ul class="reviews-list">';
+    reviewList += '<ul class="reviews-list-inv">';
     data.rows.forEach((row) => {
       //get First Initial + Last Name from data
       let initial = row.account_firstname.charAt(0).toUpperCase();

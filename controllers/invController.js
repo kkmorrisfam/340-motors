@@ -62,7 +62,7 @@ invCont.buildByInv_id = async function (req, res, next) {
   if (reviewData.length > 0) {
     reviewList = await utilities.buildReviewListByInv_id(reviewData);
   } else {
-    reviewList = "Be the first to leave a review.";
+    reviewList = '<p class="no-reviews">Be the first to leave a review.</p>';
   }
 
   let addReview = "";
@@ -90,7 +90,7 @@ invCont.buildByInv_id = async function (req, res, next) {
   } else {
     console.log("res.locals.loggedin is false");
     addReview =
-      '<p>You must first <a href="/account/login">login</a> to write a review.</p>';
+      '<p class="review-message">You must first <a href="/account/login">login</a> to write a review.</p>';
   }
 
   const vehicleName =
@@ -100,7 +100,6 @@ invCont.buildByInv_id = async function (req, res, next) {
     nav,
     vehicleView,
     reviewTitle: "Customer Reviews",
-
     reviewList,
     addReview,
   });
