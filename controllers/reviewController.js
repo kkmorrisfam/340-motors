@@ -57,11 +57,23 @@ reviewCont.buildReviewByInv_id = async function (req, res, next) {
 reviewCont.processAddReview = async function(req, res) {
     console.log("inside reviewController processAddReview")
     const {inv_id, account_id, review_text} = req.body
-    console.log("req.body inv_id: ", inv_id)
-    console.log("req.body account_id: ", account_id)
-    console.log("req.body review_text: ", review_text)
+    // console.log("req.body inv_id: ", inv_id)
+    // console.log("req.body account_id: ", account_id)
+    // console.log("req.body review_text: ", review_text)
 
-    res.redirect(`/inv/detail/${inv_id}`);
+    //update database with model
+    try {    
+      const newReview = await reviewModel.addReview(review_text, inv_id, account_id);
+      if (newReview) {        
+        return res.redirect(`/inv/detail/${inv_id}`);
+      }
+    } catch {
+      req.flash("notice", "Sorry, the review was not added.");
+      //just go back to route and reload the vehicle page anyway
+      return res.redirect(`/inv/detail/${inv_id}`);   
+    }
+    
+    // return res.redirect(`/inv/detail/${inv_id}`);
 }
 
 /***********************************

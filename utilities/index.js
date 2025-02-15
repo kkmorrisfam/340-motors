@@ -209,25 +209,26 @@ Util.checkLogin = (req, res, next) => {
 }
 
 Util.buildReviewListByInv_id = async function (data) {
-   let reviewList = "";
+  console.log("inside buildReviewListByInv_id in utilities") 
+  let reviewList = "";
   if (data.length > 0) {
     reviewList += '<ul class="reviews-list-inv">';
-    data.rows.forEach((row) => {
+    data.forEach((row) => {
       //get First Initial + Last Name from data
       let initial = row.account_firstname.charAt(0).toUpperCase();
-      let displayName = initial + row.account_lastName;
-      console.log("displayName: ", displayName);
+      let displayName = initial + row.account_lastname;
+      // console.log("displayName: ", displayName);
       // get formated date from timestamp
       let dt = new Date(row.review_date);  //review_date
       let month = dt.toLocaleString('en-US', { month: 'long' }); 
       let day = dt.getDate();
       let year = dt.getFullYear(); 
       let formattedDate = `${month} ${day}, ${year}`;
-      console.log("formatedDate: ", formattedDate);
+      // console.log("formatedDate: ", formattedDate);
       reviewList += '<li>';
-      reviewList += '<h3><span class="review-auth">';
+      reviewList += '<span class="review-auth">';
       reviewList += displayName;
-      reviewList += '</span> wrote on';
+      reviewList += '</span> wrote on ';
       reviewList += formattedDate;
       reviewList += '<hr>'
       reviewList += '<p>'
@@ -252,7 +253,7 @@ Util.renderPartial = async function (partialPath, data) {
  *************************************/
 
 Util.createReviewList = async function (reviewData) {
-  
+  console.log("inside createReviewList beginning")
   let reviewList = ""
   if (reviewData.length > 0) {
     reviewList = await Util.buildReviewListByInv_id(reviewData);

@@ -58,6 +58,7 @@ async function addReview(review_text, inv_id, account_id) {
             "INSERT INTO review (review_text, inv_id, account_id) VALUES ($1, $2, $3) RETURNING *";
             return await pool.query(sql, [review_text, inv_id, account_id]);
     } catch(error) {
+        console.error("Error adding reviews:", error)
         return error.message;
     }
 }

@@ -475,8 +475,16 @@ input:required:valid {
 }
 
 .no-reviews {
-    font-weight: 500;
+    /* font-weight: 500; */
     font-style: italic;
+}
+
+.reviews-list-inv li {
+    font-size:large;
+}
+
+.review-auth {
+    font-weight: 700;
 }
 
 /* Footer */
