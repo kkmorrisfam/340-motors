@@ -1,4 +1,5 @@
 const invModel = require("../models/inventory-model");
+const reviewModel = require("../models/review-model");
 const Util = {};
 const {body, validationResult} = require("express-validator")
 const jwt = require("jsonwebtoken")
@@ -263,6 +264,44 @@ Util.createReviewList = async function (reviewData) {
   console.log("inside createReviewList: ", reviewList)
   return reviewList;
 }
+
+
+
+/***********************************
+ * Build reviews by account_id
+ * This just builds a list, not a view
+ ***********************************/
+Util.buildReviewByAccount_id = async function (reviewData) {
+  console.log("inside Util.buildReviewByAccount_id function");
+  // const account_id = req.params.account_id;
+
+  //call the model to get the data for reviews
+  // const reviewData = reviewModel.getReviewByAccount_id(account_id)
+  
+  // build list html
+  let reviewList = ''
+  if (reviewData.length > 0) {
+    reviewList += '<div class="reviews-byAccount">'
+    reviewList += '<h2>My Reviews</h2><hr>'
+    reviewList += '<ul class="my-reviews">'
+    reviewData.forEach((row) => {
+      // get formated date from timestamp
+      let dt = new Date(row.review_date);  //review_date
+      let month = dt.toLocaleString('en-US', { month: 'long' }); 
+      let day = dt.getDate();
+      let year = dt.getFullYear(); 
+      let formattedDate = `${month} ${day}, ${year}`;
+      reviewList += `<li>Reviewed the ${row.inv_year} ${row.inv_make} ${row.inv_model} on ${formattedDate} |`
+      reviewList += `<a href="/reviews/edit/${row.review_id}" title='Click to update'> Modify </a>`
+      reviewList += `|<a href="/reviews/delete/${row.review_id}" title='Click to delete'> Delete</a></li>`
+    });
+    reviewList += '</ul></div>'
+  }  // else display a different message?  
+  console.log("inside review by account/reviewList: ", reviewList)
+  return reviewList;
+}
+
+
 
 /* ************************
  * Middleware For Handling Errors

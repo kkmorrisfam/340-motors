@@ -46,10 +46,6 @@ reviewCont.buildReviewByInv_id = async function (req, res, next) {
 
 
 
-/***********************************
- * Build reviews by account_id
- ***********************************/
-
 
 /***********************************
  * add new review
@@ -77,11 +73,18 @@ reviewCont.processAddReview = async function(req, res) {
 }
 
 /***********************************
- * update review
+ * update/edit review
  ***********************************/
+reviewCont.buildEditReviewView = async function(req, res) {
+  console.log("inside buildEditReviewView`")
+}
 
 /***********************************
  * delete review
  ***********************************/
+reviewCont.buildDeleteReviewView = async function(req, res) {
+  console.log("inside buildDeleteReviewView`")
+}
+
 
 module.exports = reviewCont

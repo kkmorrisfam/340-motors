@@ -2,9 +2,11 @@
  */
 const utilities = require("../utilities/");
 const accountModel = require("../models/account-model");
+const reviewModel = require("../models/review-model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+
 
 /* **********************
  * Deliver login view
@@ -173,6 +175,12 @@ async function buildAccountManage(req, res, next) {
     req.flash("notice", "Please log in to access your account");
     return res.redirect("/account/login");
   }
+  const account_id = req.user.account_id;
+  console.log("account_id in buildAccountManage: ", account_id)
+  const reviewData = await reviewModel.getReviewByAccount_id(account_id)
+  console.log("reviewData in buildAccountManage: ", reviewData)
+  const accountReviews = await utilities.buildReviewByAccount_id(reviewData)
+  console.log("accountReviews in buildAccountManage: ", accountReviews)
 
   // builds account management view
   res.render("account/accounts", {
@@ -182,6 +190,7 @@ async function buildAccountManage(req, res, next) {
     account_firstname: req.user.account_firstname,
     account_id: req.user.account_id,
     account_type: req.user.account_type,
+    accountReviews
   });
 }
 

@@ -19,8 +19,18 @@ router.post(
     reviewValidate.checkAddReviewData,    
     utilities.handleErrors(reviewCont.processAddReview));
 
-//Route to get review data by account_id for update or delete
-// router.get('/',)
+//Route to get review data by account_id for update 
+router.get('/edit/:review_id',
+    utilities.checkLogin,
+    utilities.handleErrors(reviewCont.buildEditReviewView)
+)
+
+//Route to get review data by account_id to delete
+router.get('/delete/:review_id',
+    utilities.checkLogin,
+    utilities.handleErrors(reviewCont.buildDeleteReviewView)
+)
+
 
 //Route to post update - review data
 
