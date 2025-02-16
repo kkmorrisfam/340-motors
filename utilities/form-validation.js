@@ -4,7 +4,8 @@ const validate = {};
 // const invModel = require("../models/inventory-model");
 
 /* **********************************
- * New Classification Data Validation Rules
+ * New Classification Data Validation Rules0.
+
  ************************************/
 
 validate.newClassificationRules = () => {

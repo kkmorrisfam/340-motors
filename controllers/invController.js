@@ -56,7 +56,7 @@ invCont.buildByInv_id = async function (req, res, next) {
 
   //call the model to get the data for reviews
   const reviewData = await reviewModel.getReviewByInv_id(inv_id);
-  console.log("reviewData", reviewData);
+  // console.log("reviewData", reviewData);
 
   // create review list if there are reviews  
   const reviewList = await utilities.createReviewList(reviewData);
