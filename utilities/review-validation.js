@@ -147,7 +147,7 @@ validate.checkUpdateReviewData = async (req, res, next) => {
   if (!errors.isEmpty()) {
     let nav = await utilities.getNav();
 
-    res.status(400).render("/reviews/edit-review", {
+    res.status(400).render("./reviews/edit-review", {
       errors,
       title: "Edit Your Review",
       nav,

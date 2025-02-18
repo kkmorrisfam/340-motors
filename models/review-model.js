@@ -65,16 +65,36 @@ async function addReview(review_text, inv_id, account_id) {
 
 /********************************
  * update review
+ * I will just be updating the text, do I need the rest of the information returned?
  ********************************/
-async function updateReview() {
-  console.log("inside review-model updateReview");
+async function updateReview(review_text, review_id) {
+  console.log("inside review-model updateReview", review_text, review_id);
+  
+  try {
+    const sql = 
+    "UPDATE public.review SET review_text = $1 WHERE review_id = $2 RETURNING *"
+
+    const data = await pool.query(sql, [review_text, review_id])
+    //return one row, returns only fields we included
+    return data.rows[0]
+  } catch (error) {
+    console.error("model error: " + error)
+  }
 }
 
 /********************************
  * delete review
  ********************************/
-async function deleteReview() {
+async function deleteReview(review_id) {
   console.log("inside review-model deleteReview");
+  try {
+    const sql = 
+      "DELETE FROM public.review WHERE review_id = $1"
+    const data = await pool.query(sql, [review_id])
+    return data
+  } catch (error) {
+    console.error("Delete Review error")
+  }
 }
 
 module.exports = {

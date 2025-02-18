@@ -9,21 +9,18 @@ const reviewCont = {};
  * -then load this second.  Needs AJAX
  ***********************************/
 reviewCont.buildReviewByInv_id = async function (req, res, next) {
-  
-  console.log(
-    "inside controllers/reviewController.js file reviewCont.buildReviewByInv_id function"
-  );
+  // console.log("inside controllers/reviewController.js file reviewCont.buildReviewByInv_id function");
   const inv_id = req.params.inv_id;
 
   //call the model to get the data for reviews
   const reviewData = await reviewModel.getReviewByInv_id(inv_id);
-  console.log("reviewData", reviewData);
+  // console.log("reviewData", reviewData);
   // build list html
   const reviewList = await utilities.buildReviewListByInv_id(reviewData);
   let addReview = "";
   // check login, if logged in add a form to add a review
   if (res.locals.loggedin) {
-    console.log("res.locals.loggedin is true");
+    // console.log("res.locals.loggedin is true");
     const data = {
       reviewData,
       inv_id,
@@ -32,7 +29,7 @@ reviewCont.buildReviewByInv_id = async function (req, res, next) {
 
     //addReview = ejs.renderFile('.review/add-form', data)
   } else {
-    console.log("res.locals.loggedin is false");
+    // console.log("res.locals.loggedin is false");
     addReview =
       '<p>You must first <a href="/account/login">login</a> to write a review.</p>';
   }
@@ -46,10 +43,11 @@ reviewCont.buildReviewByInv_id = async function (req, res, next) {
 };
 
 /***********************************
- * add new review
+ * add new review to the database
+ * or return on error
  ***********************************/
 reviewCont.processAddReview = async function (req, res) {
-  console.log("inside reviewController processAddReview");
+  // console.log("inside reviewController processAddReview");
   const { inv_id, account_id, review_text } = req.body;
   // console.log("req.body inv_id: ", inv_id)
   // console.log("req.body account_id: ", account_id)
@@ -70,70 +68,124 @@ reviewCont.processAddReview = async function (req, res) {
     //just go back to route and reload the vehicle page anyway
     return res.redirect(`/inv/detail/${inv_id}`);
   }
-
-  // return res.redirect(`/inv/detail/${inv_id}`);
 };
 
 /***********************************
- * update/edit review
+ * Build update/edit review View
  ***********************************/
 reviewCont.buildEditReviewView = async function (req, res) {
   let nav = await utilities.getNav();
   console.log("inside buildEditReviewView`");
 
-  const review_id = req.params.review_id
-  console.log("req.params: ", review_id)
-  const account_id = req.user.account_id
-  const reviewData = await reviewModel.getReviewByAccount_id(account_id)
-  console.log("reviewData: ", reviewData)
+  const review_id = req.params.review_id;
+  // console.log("req.params: ", review_id)
+  const account_id = req.user.account_id;
+  const reviewData = await reviewModel.getReviewByAccount_id(account_id);
+  console.log("reviewData: ", reviewData);
 
-  const matchedReview = reviewData.find(review => review.review_id === parseInt(review_id));
-  const account_firstname = matchedReview.account_firstname
+  const matchedReview = reviewData.find(
+    (review) => review.review_id === parseInt(review_id)
+  );
+  const account_firstname = matchedReview.account_firstname;
 
-  // get screen name  
-  const screen_name = account_firstname.charAt(0).toUpperCase() + matchedReview.account_lastname;
+  // get screen name
+  const screen_name =
+    account_firstname.charAt(0).toUpperCase() + matchedReview.account_lastname;
 
-   
+  // get make model and year for title
+  const vehicleName = `${reviewData[0].inv_year} ${reviewData[0].inv_make} ${reviewData[0].inv_model}`;
+
   res.render("./reviews/edit-review", {
-    title: "Edit Your Review",
+    title: `Edit Your Review for the ${vehicleName}`,
     nav,
-    account_firstname, 
-    account_id, 
+    account_firstname,
+    account_id,
     inv_id: matchedReview.inv_id,
     screen_name,
     review_text: matchedReview.review_text,
     review_id,
-    errors: null
+    errors: null,
   });
 };
+
+/*******************************************
+ *  Process update/edit review
+ *******************************************/
 
 reviewCont.processUpdateReview = async function (req, res) {
   console.log("inside processUpdateReview");
+  const { screen_name, review_id, review_text, account_id, inv_id } = req.body;
+
+  // console.log("processUpdateReview inv_id: ", inv_id)
+  // console.log("review_id in process update: ", review_id);
+  const updateResult = await reviewModel.updateReview(review_text, review_id);
+  
+  if (updateResult) {    
+    req.flash("notice", "The review was successfully updated.");
+    res.redirect("/account");
+  } else {
+    
+    //rebuild edit review form    
+    let nav = await utilities.getNav();
+
+    //returns array of reviews for account
+    const reviewData = await reviewModel.getReviewByAccount_id(account_id);
+    // console.log("reviewData on error: ", reviewData);
+
+    //returns object matching review_id
+    const matchedReview = reviewData.find((review) => review.review_id === parseInt(review_id));
+    
+    // console.log("matchedReview: ", matchedReview);
+
+    // get make model and year for title
+    const vehicleName = `${matchedReview.inv_year} ${matchedReview.inv_make} ${matchedReview.inv_model}`;
+
+    req.flash("notice", `Sorry, the update failed.`);
+    res.status(501).render("reviews/edit-review", {
+      title: `Edit Your Review for the ${vehicleName}`,
+      nav,
+      screen_name,      
+      review_id,
+      review_text,
+      account_id,
+      inv_id,
+      errors: null,
+    });
+  }
 };
 
 /***********************************
- * delete review
+ * Build delete review form view
  ***********************************/
 reviewCont.buildDeleteReviewView = async function (req, res) {
   console.log("inside buildDeleteReviewView`");
+  let nav = await utilities.getNav();
+  const review_id = req.params.review_id;
+  const account_id = req.user.account_id;  
 
-  // get screen name
-  const account_firstname = req.user.account_firstname;
-  const account_lastname = req.user.account_lastname;
+  const reviewData = await reviewModel.getReviewByAccount_id(account_id);
+  console.log("reviewData in buildDeleteReviewView: ", reviewData)
+  const matchedReview = reviewData.find((review) => review.review_id === parseInt(review_id));  
+  console.log("matchedReview: ", matchedReview)
+  const vehicleName = `${matchedReview.inv_year} ${matchedReview.inv_make} ${matchedReview.inv_model}`;
 
+  // get data to be passed to view
   const screen_name =
-    account_firstname.charAt(0).toUpperCase() + account_lastname;
+  matchedReview.account_firstname.charAt(0).toUpperCase() + matchedReview.account_lastname;
 
-  res.render("/reviews/delete-review", {
-    title: "Delete Your Review",
+
+  res.render("./reviews/delete-review", {
+    title: `Delete Your Review for ${vehicleName}`,
     nav,
-    account_firstname: req.user.account_firstname,
-    account_id: req.user.account_id,
-    account_type: req.user.account_type,
-    screen_name,
-    review_text: req.user.review_text,
+    screen_name,      
+    review_id,
+    review_text: matchedReview.review_text,
+    account_id,
+    inv_id: matchedReview.inv_id,    
+    vehicleName,
     errors: null,
   });
+  
 };
 
 /***********************************
@@ -142,6 +194,37 @@ reviewCont.buildDeleteReviewView = async function (req, res) {
 
 reviewCont.processDeleteReview = async function (req, res) {
   console.log("inside processDeleteReview");
+  const {screen_name, review_id, review_text, account_id, inv_id, vehicleName } = req.body
+  console.log("req.body in delete: ", req.body)
+  
+  // get review data again
+  // const reviewData = await reviewModel.getReviewByAccount_id(account_id);
+  // const matchedReview = reviewData.find((review) => review.review_id === parseInt(review_id));  
+  // console.log("matchedReview: ", matchedReview)
+  // const vehicleName = `${matchedReview.inv_year} ${matchedReview.inv_make} ${matchedReview.inv_model}`;
+
+
+  const deleteThisOne = await reviewModel.deleteReview(review_id)
+  console.log("deleteThisOne: ", deleteThisOne)
+  
+  if(deleteThisOne) {
+    req.flash("notice", `Your review for the ${vehicleName} was successfully deleted`)
+    res.redirect("/account")
+  } else {
+    let nav = await utilities.getNav()    
+    
+    req.flash("notice", `Sorry, deletion of the review for the ${vehicleName} failed.`)
+    res.status(501).render("/reviews/delete-review", {
+      title: `Delete Your Review for ${vehicleName}`,
+      nav,
+      screen_name,      
+      review_id,
+      review_text,
+      account_id,
+      inv_id,    
+      errors: null,
+    });
+  }
 };
 
 module.exports = reviewCont;
