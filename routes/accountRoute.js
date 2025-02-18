@@ -9,7 +9,7 @@ const regValidate = require("../utilities/account-validation");
 // the server.js file has the "/account" part of the path, then sends it to this file.  When the route
 // also has "/login" after "/account"  it then adds the
 // instruction to go run the buildLogin function in the accountController file
-// console.log("inside accountRoute")
+
 router.get("/login", utilities.handleErrors(accountController.buildLogin));
 
 //add route for registration page

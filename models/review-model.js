@@ -6,7 +6,7 @@ const pool = require("../database/");
 
 async function getReviewByInv_id(inv_id) {
   try {
-    console.log("getReviewByInv_id function");
+    
     const data = await pool.query(
       `SELECT r.review_id, r.inv_id, r.review_text, r.review_date, a.account_id, a.account_firstname, a.account_lastname
              FROM public.review AS r
@@ -27,7 +27,7 @@ async function getReviewByInv_id(inv_id) {
  ********************************/
 async function getReviewByAccount_id(account_id) {
   try {
-    console.log("getReviewByAccount_id function");
+    
     const data = await pool.query(
       `SELECT r.review_id, r.inv_id, r.review_text, r.review_date, i.inv_make, 
                 i.inv_model, i.inv_year, a.account_id, a.account_firstname,
@@ -52,7 +52,7 @@ async function getReviewByAccount_id(account_id) {
  *
  ********************************/
 async function addReview(review_text, inv_id, account_id) {
-  console.log("inside review-model addReview");
+  
   try {
     const sql =
       "INSERT INTO review (review_text, inv_id, account_id) VALUES ($1, $2, $3) RETURNING *";
@@ -68,7 +68,6 @@ async function addReview(review_text, inv_id, account_id) {
  * I will just be updating the text, do I need the rest of the information returned?
  ********************************/
 async function updateReview(review_text, review_id) {
-  console.log("inside review-model updateReview", review_text, review_id);
   
   try {
     const sql = 
@@ -86,7 +85,7 @@ async function updateReview(review_text, review_id) {
  * delete review
  ********************************/
 async function deleteReview(review_id) {
-  console.log("inside review-model deleteReview");
+  
   try {
     const sql = 
       "DELETE FROM public.review WHERE review_id = $1"

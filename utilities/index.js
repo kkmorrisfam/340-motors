@@ -12,8 +12,7 @@ const ejs = require("ejs");
  ************************** */
 Util.getNav = async function (req, res, next) {
   let data = await invModel.getClassifications();
-  // console.log(data);
-  console.log("inside utilities/index.js in Util.getNav -- build Nav");
+  
   let list = "<ul>";
   list += '<li><a href="/" title="Home page">Home</a></li>';
   data.rows.forEach((row) => {
@@ -38,9 +37,7 @@ Util.getNav = async function (req, res, next) {
 
 Util.buildClassificationGrid = async function (data) {
   let grid ='';
-  console.log(
-    "inside utilities/index.js Util.buildClassificaitonGrid function to build html grid/vehicle cards by classification"
-  );
+  
   if (data.length > 0) {
     grid = '<ul id="inv-display">';
     data.forEach((vehicle) => {
@@ -93,7 +90,7 @@ Util.buildClassificationGrid = async function (data) {
  * Constructs the single vehicle view
  ************************** */
 Util.buildVehicleView = async function (data) {
-  console.log("data in buildVehicleView: ", data[0]);
+  
   let vehicleView = '<div class="vehicleView">';
 
   vehicleView += '<div class="imgContainer">';
@@ -156,8 +153,7 @@ Util.buildClassificationList = async function (classification_id = null) {
 ******************************************/
 Util.checkJWTToken = (req, res, next) => {
   if (req.cookies.jwt) {
-    // console.log(req.cookies.jwt)
-    
+        
     jwt.verify(
       req.cookies.jwt, 
       process.env.ACCESS_TOKEN_SECRET, 
@@ -171,7 +167,7 @@ Util.checkJWTToken = (req, res, next) => {
         res.locals.loggedin = 1
         res.locals.authUser = accountData
         req.user = accountData   //Store user data in req.user for easy access
-        console.log("req.user in checkJWTToken: ", req.user)
+        // console.log("req.user in checkJWTToken: ", req.user)
         next()
       })
   } else {
@@ -210,7 +206,7 @@ Util.checkLogin = (req, res, next) => {
 }
 
 Util.buildReviewListByInv_id = async function (data) {
-  console.log("inside buildReviewListByInv_id in utilities") 
+  
   let reviewList = "";
   if (data.length > 0) {
     reviewList += '<ul class="reviews-list-inv">';
@@ -218,14 +214,14 @@ Util.buildReviewListByInv_id = async function (data) {
       //get First Initial + Last Name from data
       let initial = row.account_firstname.charAt(0).toUpperCase();
       let displayName = initial + row.account_lastname;
-      // console.log("displayName: ", displayName);
+      
       // get formated date from timestamp
       let dt = new Date(row.review_date);  //review_date
       let month = dt.toLocaleString('en-US', { month: 'long' }); 
       let day = dt.getDate();
       let year = dt.getFullYear(); 
       let formattedDate = `${month} ${day}, ${year}`;
-      // console.log("formatedDate: ", formattedDate);
+      
       reviewList += '<li>';
       reviewList += '<span class="review-auth">';
       reviewList += displayName;
@@ -244,7 +240,7 @@ Util.buildReviewListByInv_id = async function (data) {
  ***********************************/
 
 Util.renderPartial = async function (partialPath, data) {
-  console.log("inside renderPartial in utilities/index: data")
+  
   const filePath = path.join(__dirname, "../views", `${partialPath}.ejs`);
   return await ejs.renderFile(filePath, data);
 };
@@ -254,14 +250,14 @@ Util.renderPartial = async function (partialPath, data) {
  *************************************/
 
 Util.createReviewList = async function (reviewData) {
-  console.log("inside createReviewList beginning")
+  
   let reviewList = ""
   if (reviewData.length > 0) {
     reviewList = await Util.buildReviewListByInv_id(reviewData);
   } else {
     reviewList = '<p class="no-reviews">Be the first to leave a review.</p>';
   }
-  console.log("inside createReviewList: ", reviewList)
+  
   return reviewList;
 }
 
@@ -272,7 +268,7 @@ Util.createReviewList = async function (reviewData) {
  * This just builds a list, not a view
  ***********************************/
 Util.buildReviewByAccount_id = async function (reviewData) {
-  console.log("inside Util.buildReviewByAccount_id function");
+  
   // const account_id = req.params.account_id;
 
   //call the model to get the data for reviews
@@ -297,7 +293,7 @@ Util.buildReviewByAccount_id = async function (reviewData) {
     });
     reviewList += '</ul></div>'
   }  // else display a different message?  
-  // console.log("inside review by account/reviewList: ", reviewList)
+  
   return reviewList;
 }
 

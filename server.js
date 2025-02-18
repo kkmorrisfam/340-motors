@@ -111,8 +111,6 @@ app.use(async (err, req, res, next) => {
 })
 
 
-console.log("inside server.js before port and host and listen.")
-
 /* ***********************
  * Local Server Information
  * Values from .env (environment) file

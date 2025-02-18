@@ -5,7 +5,7 @@ const pool = require("../database/")
  * Get all classification data
  * ************************ */
 async function getClassifications() {
-    console.log("inside models/inventory-model.js in getClassifications function to run Select all SQL query")
+    
     return await pool.query("SELECT * FROM public.classification ORDER BY classification_name")
 }
 
@@ -14,7 +14,7 @@ async function getClassifications() {
     ******************************/
 async function getInventoryByClassificationId(classification_id) {
     try {
-      console.log("inside models/inventory-model.js file in getInventoryByClassificationId function to run JOIN SQL query" )
+      
       const data = await pool.query(
         `SELECT * FROM public.inventory AS i 
         JOIN public.classification AS c 
@@ -34,7 +34,7 @@ async function getInventoryByClassificationId(classification_id) {
 
 async function getInventoryByInv_id(inv_id) {
   try {
-    console.log("inside models/inventory-model.js file in getInventoryByInv_id function to run SQ + inv_id: ", inv_id)
+    
     const data = await pool.query(
       `SELECT * FROM public.inventory
       WHERE inv_id = $1`,
@@ -53,7 +53,7 @@ async function getInventoryByInv_id(inv_id) {
 async function addNewClassification(  
   classification_name
 ) {
-  console.log("inside inventory-model addNewClassification function.")
+  
   try {
     const sql =
       "INSERT INTO classification (classification_name) VALUES ($1) RETURNING *";
@@ -146,7 +146,7 @@ async function updateVehicle(
  ***********************/
 
 async function deleteVehicle(inv_id) {
-  console.log("invModel.inside deleteVehicle inv_id: ", inv_id)
+  
   try {
     const sql =
       "DELETE FROM public.inventory WHERE inv_id = $1" 

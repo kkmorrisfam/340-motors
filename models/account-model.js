@@ -43,11 +43,11 @@ async function checkExistingEmail(account_email) {
 
 async function checkExistingEmailById(account_email, account_id) {
   try {
-    console.log("inside checkExistingEmailById 1")
+    
     const sql =
       "SELECT * FROM account WHERE account_email = $1 AND account_id != $2";      
     const email = await pool.query(sql, [account_email, account_id]);
-    console.log("inside checkExistingEmailById 2")
+    
     return email.rowCount;
   } catch (error) {
     return error.message;
@@ -100,7 +100,7 @@ async function updateAccountInfo(
  ***********************/
 
 async function updatePassword(account_password, account_id) {
-  console.log("inside updatePassword in model")
+  
   try {
     const sql =
       "UPDATE public.account SET account_password = $1 WHERE account_id = $2 RETURNING *";

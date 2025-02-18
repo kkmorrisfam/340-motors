@@ -9,7 +9,6 @@ const validate = {};
  ************************************/
 
 validate.newClassificationRules = () => {
-  console.log("inside router.post for validation within Util.newClassificationRules function");
   
   const validationRules = [
     body("classification_name")
@@ -18,8 +17,7 @@ validate.newClassificationRules = () => {
       .notEmpty().withMessage("The field was empty. Try again.").bail()      
       .matches(/^[A-Za-z]+$/).withMessage("Please provide a valid vehicle classification name."),
   ];
-
-  // console.log("Validation rules:", validationRules);
+  
   return validationRules;
 }; 
 
@@ -31,12 +29,10 @@ validate.newClassificationRules = () => {
 
   validate.checkClassificationData = async (req, res, next) => {
     const { classification_name } = req.body;
-    console.log(
-      "inside validate.checkClassificationData in utilities/index file"
-    );
+    
     let errors = [];
     errors = validationResult(req);
-    console.log("param:errors in checkClassificationData", errors)
+    
     if (!errors.isEmpty()) {
       let nav = await utilities.getNav();  //need to use Util here and not "this"
       res.render("inventory/add-classification", {
@@ -56,10 +52,7 @@ validate.newClassificationRules = () => {
  ************************************/
 
 validate.addVehicleRules = () => {
-  console.log(
-    "inside router.post for validation within validate.addVehicleRules function form-validation.js"
-  );
-
+  
   const validationRules = [
     body("classification_id")
       .notEmpty()
@@ -120,7 +113,6 @@ validate.addVehicleRules = () => {
       .isLength({ min: 3 }).withMessage("Please provide a valid image path."), //on error this message is sent
   ];
 
-//   console.log("Add Vehicle Validation rules:", validationRules);
   return validationRules;
 };
 
@@ -142,11 +134,7 @@ validate.checkNewVehicleData = async (req, res, next) => {
     inv_image,
     inv_thumbnail,
   } = req.body;
-  console.log(
-    "inside validate.checkNewVehicleData in utilities/form-validation file"
-  );
-  // console.log(inv_make)
-  // console.log(inv_thumbnail)
+  
   let errors = [];
   errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -192,14 +180,10 @@ validate.checkUpdateData = async (req, res, next) => {
     inv_thumbnail,
     inv_id
   } = req.body;
-  console.log(
-    "inside validate.checkUpdateData in utilities/form-validation file"
-  );
-  // console.log(inv_make)
-  // console.log(inv_thumbnail)
+  
   let errors = [];
   errors = validationResult(req);
-  console.log("inside checkUpdateData errors: ", errors)
+  
   if (!errors.isEmpty()) {
     let nav = await utilities.getNav();
     let classificationList = await utilities.buildClassificationList(classification_id);

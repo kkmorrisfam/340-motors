@@ -487,6 +487,10 @@ input:required:valid {
     font-weight: 700;
 }
 
+.reviews-byAccount {
+    padding: 1rem;
+}
+
 /* Footer */
 
 footer {

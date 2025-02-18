@@ -168,7 +168,7 @@ async function accountLogin(req, res) {
  ****************************/
 
 async function buildAccountManage(req, res, next) {
-  // console.log("buildAccountManage view");
+  
   let nav = await utilities.getNav();
 
   if (!req.user) {
@@ -176,11 +176,11 @@ async function buildAccountManage(req, res, next) {
     return res.redirect("/account/login");
   }
   const account_id = req.user.account_id;
-  // console.log("account_id in buildAccountManage: ", account_id)
+ 
   const reviewData = await reviewModel.getReviewByAccount_id(account_id)
-  // console.log("reviewData in buildAccountManage: ", reviewData)
+ 
   const accountReviews = await utilities.buildReviewByAccount_id(reviewData)
-  // console.log("accountReviews in buildAccountManage: ", accountReviews)
+ 
 
   // builds account management view
   res.render("account/accounts", {
@@ -224,7 +224,7 @@ async function buildUpdateAccount(req, res, next) {
  *******************************/
 
 async function changeAccountInfo(req, res) {
-  // console.log("inside changeAccountInfo in accountController")
+  
   let nav = await utilities.getNav();
   // req.body data comes from submitted form
   const { account_firstname, account_lastname, account_email, account_id } =

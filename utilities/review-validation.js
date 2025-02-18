@@ -11,10 +11,7 @@ const ejs = require("ejs");
  ********************************/
 
 validate.addReviewRules = () => {
-  console.log(
-    "inside router.post for validation within validate.addReviewRules function review-validation.js"
-  );
-
+  
   const validationRules = [
     body("review_text")
       .trim() // needs to be before .notEmpty()
@@ -36,14 +33,11 @@ validate.addReviewRules = () => {
 
 validate.checkAddReviewData = async (req, res, next) => {
   const { screen_name, review_text, account_id, inv_id } = req.body;
-  console.log(
-    "inside validate.checkAddReviewData in utilities/review-validation file"
-  );
-
+ 
   //If there are errors (errors not empty), return to form with sticky data
   let errors = [];
   errors = validationResult(req);
-  console.log("errors in review-validation:", errors);
+  
   if (!errors.isEmpty()) {
     let nav = await utilities.getNav();
     const vehicleData = await invModel.getInventoryByInv_id(inv_id);
@@ -63,12 +57,11 @@ validate.checkAddReviewData = async (req, res, next) => {
     if (res.locals.loggedin) {
       const account_firstname = req.user.account_firstname;
       const account_lastname = req.user.account_lastname;
-      console.log("account_firstname invController: ", account_firstname);
+      
       const screen_name =
         account_firstname.charAt(0).toUpperCase() + account_lastname;
       const account_id = req.user.account_id;
 
-      console.log("res.locals.loggedin is true");
       const reviewFormData = {
         screen_name,
         account_id,
@@ -82,8 +75,7 @@ validate.checkAddReviewData = async (req, res, next) => {
       );
 
       //addReview = ejs.renderFile('.review/add-form', data)
-    } else {
-      console.log("res.locals.loggedin is false");
+    } else {      
       addReview =
         '<p class="review-message">You must first <a href="/account/login">login</a> to write a review.</p>';
     }
@@ -111,10 +103,7 @@ validate.checkAddReviewData = async (req, res, next) => {
  ********************************/
 
 validate.updateReviewRules = () => {
-  console.log(
-    "inside router.post for validation within validate.updateReviewRules function review-validation.js"
-  );
-
+  
   const validationRules = [
     body("review_text")
       .trim() // needs to be before .notEmpty()
@@ -136,14 +125,11 @@ validate.updateReviewRules = () => {
 
 validate.checkUpdateReviewData = async (req, res, next) => {
   const { screen_name, review_text, account_id, inv_id, account_firstname, review_id } = req.body;
-  console.log(
-    "inside validate.checkUpdateReviewData in utilities/review-validation file"
-  );
-
+  
   //If there are errors (errors not empty), return to form with sticky data
   let errors = [];
   errors = validationResult(req);
-  console.log("errors in review-validation:", errors);
+  
   if (!errors.isEmpty()) {
     let nav = await utilities.getNav();
 

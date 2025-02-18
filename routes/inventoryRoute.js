@@ -5,8 +5,6 @@ const invController = require("../controllers/invController");
 const utilities = require("../utilities/");
 const vehicleValidate = require("../utilities/form-validation");
 
-// console.log("Inventory routes loaded");
-
 // Route to build inventory by classification view
 router.get(
   "/type/:classificationId",
@@ -115,7 +113,6 @@ router.post(
   utilities.handleErrors(invController.processDeleteVehicle)
 );
 
-console.log("inside routes/inventoryRoutes.js file");
 
 //appends new routes to router object
 module.exports = router;
