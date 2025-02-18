@@ -1,6 +1,7 @@
 const reviewModel = require("../models/review-model");
 const utilities = require("../utilities/index");
 const ejs = require("ejs");
+const he = require("he")
 const reviewCont = {};
 
 /***********************************
@@ -102,7 +103,7 @@ reviewCont.buildEditReviewView = async function (req, res) {
     account_id,
     inv_id: matchedReview.inv_id,
     screen_name,
-    review_text: matchedReview.review_text,
+    review_text: he.decode(matchedReview.review_text),
     review_id,
     errors: null,
   });
@@ -175,11 +176,11 @@ reviewCont.buildDeleteReviewView = async function (req, res) {
 
 
   res.render("./reviews/delete-review", {
-    title: `Delete Your Review for ${vehicleName}`,
+    title: `Delete Your Review for the ${vehicleName}`,
     nav,
     screen_name,      
     review_id,
-    review_text: matchedReview.review_text,
+    review_text: he.decode(matchedReview.review_text),
     account_id,
     inv_id: matchedReview.inv_id,    
     vehicleName,
@@ -197,13 +198,6 @@ reviewCont.processDeleteReview = async function (req, res) {
   const {screen_name, review_id, review_text, account_id, inv_id, vehicleName } = req.body
   console.log("req.body in delete: ", req.body)
   
-  // get review data again
-  // const reviewData = await reviewModel.getReviewByAccount_id(account_id);
-  // const matchedReview = reviewData.find((review) => review.review_id === parseInt(review_id));  
-  // console.log("matchedReview: ", matchedReview)
-  // const vehicleName = `${matchedReview.inv_year} ${matchedReview.inv_make} ${matchedReview.inv_model}`;
-
-
   const deleteThisOne = await reviewModel.deleteReview(review_id)
   console.log("deleteThisOne: ", deleteThisOne)
   
@@ -214,14 +208,15 @@ reviewCont.processDeleteReview = async function (req, res) {
     let nav = await utilities.getNav()    
     
     req.flash("notice", `Sorry, deletion of the review for the ${vehicleName} failed.`)
-    res.status(501).render("/reviews/delete-review", {
-      title: `Delete Your Review for ${vehicleName}`,
+    res.status(501).render("./reviews/delete-review", {
+      title: `Delete Your Review for the ${vehicleName}`,
       nav,
       screen_name,      
       review_id,
       review_text,
-      account_id,
+      account_id,      
       inv_id,    
+      vehicleName,
       errors: null,
     });
   }

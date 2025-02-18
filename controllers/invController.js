@@ -61,12 +61,6 @@ invCont.buildByInv_id = async function (req, res, next) {
   // create review list if there are reviews  
   const reviewList = await utilities.createReviewList(reviewData);
 
-  // if (reviewData.length > 0) {
-  //   reviewList = await utilities.buildReviewListByInv_id(reviewData);
-  // } else {
-  //   reviewList = '<p class="no-reviews">Be the first to leave a review.</p>';
-  // }
-
   let addReview = "";
   // check login, if logged in add a form to add a review
   if (res.locals.loggedin) {
@@ -77,7 +71,7 @@ invCont.buildByInv_id = async function (req, res, next) {
       account_firstname.charAt(0).toUpperCase() + account_lastname;
     const account_id = req.user.account_id;
 
-    console.log("res.locals.loggedin is true");
+    // console.log("res.locals.loggedin is true");
     const reviewFormData = {
       screen_name,
       account_id,
